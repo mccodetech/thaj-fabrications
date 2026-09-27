@@ -100,15 +100,15 @@
             </div>
         </div>
 
-        <!-- Section 2: Manage Products Menu -->
+        <!-- Section 2: Manage Products Menu (With Edit & Delete) -->
         <div id="sectionProducts" class="bg-white p-4 md:p-6 rounded-lg shadow-md hidden space-y-4 text-sm md:text-base">
-            <h2 class="text-lg font-semibold text-gray-700">Add New Product to Default Menu</h2>
+            <h2 class="text-lg font-semibold text-gray-700">Manage Products Menu</h2>
             <div class="flex gap-2">
                 <input type="text" id="newProductName" placeholder="Enter product name" class="w-full p-2 border rounded">
                 <button onclick="addNewProduct()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">Add</button>
             </div>
             <h3 class="font-medium text-gray-600 mt-3">Current Products List:</h3>
-            <ul id="productsListUI" class="list-disc pl-5 space-y-1 text-gray-700"></ul>
+            <div id="productsListUI" class="space-y-2"></div>
         </div>
 
         <!-- Section 3: Accounts / Search History -->
@@ -149,7 +149,7 @@
 
         window.checkPassword = function() {
             let pass = document.getElementById('passInput').value;
-            if(pass === "1234") { // പാസ്‌വേഡ് ഇവിടെ മാറ്റാവുന്നതാണ്
+            if(pass === "1234") {
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('mainApp').classList.remove('hidden');
                 loadProductsIntoSelects();
@@ -180,12 +180,19 @@
         }
 
         window.loadProductManagementList = function() {
-            let ul = document.getElementById('productsListUI');
-            ul.innerHTML = "";
-            defaultProducts.forEach(prod => {
-                let li = document.createElement('li');
-                li.textContent = prod;
-                ul.appendChild(li);
+            let div = document.getElementById('productsListUI');
+            div.innerHTML = "";
+            defaultProducts.forEach((prod, index) => {
+                let itemDiv = document.createElement('div');
+                itemDiv.className = "flex justify-between items-center bg-gray-50 p-2 rounded border";
+                itemDiv.innerHTML = `
+                    <span>${prod}</span>
+                    <div class="space-x-2">
+                        <button onclick="editProduct(${index})" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Edit</button>
+                        <button onclick="deleteProduct(${index})" class="bg-red-600 text-white px-2 py-1 rounded text-xs">Delete</button>
+                    </div>
+                `;
+                div.appendChild(itemDiv);
             });
         }
 
@@ -203,6 +210,26 @@
                 }
             } else {
                 alert("Please enter a valid product name.");
+            }
+        }
+
+        window.editProduct = function(index) {
+            let oldName = defaultProducts[index];
+            let newName = prompt("പ്രൊഡക്റ്റിന്റെ പുതിയ പേര് നൽകുക:", oldName);
+            if(newName && newName.trim() !== "") {
+                defaultProducts[index] = newName.trim();
+                loadProductsIntoSelects();
+                loadProductManagementList();
+                alert("Product updated successfully!");
+            }
+        }
+
+        window.deleteProduct = function(index) {
+            if(confirm("ഈ പ്രൊഡക്റ്റ് ഒഴിവാക്കണമെന്നുറപ്പാണോ?")) {
+                defaultProducts.splice(index, 1);
+                loadProductsIntoSelects();
+                loadProductManagementList();
+                alert("Product deleted successfully!");
             }
         }
 
@@ -507,7 +534,7 @@
                 loadProductsIntoSelects();
                 calculateTotal();
             }
-            alert("Record loaded into form for editing. You can save as a new bill or update.");
+            alert("Record loaded into form for editing.");
         }
 
         window.cancelRecord = async function(docId) {
