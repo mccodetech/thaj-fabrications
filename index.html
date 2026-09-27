@@ -144,6 +144,9 @@
         </div>
     </div>
 
+    <!-- Hidden PDF Export Container -->
+    <div id="pdfExportContainer" style="display:none;"></div>
+
     <!-- Firebase SDKs and Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -475,7 +478,7 @@
             let currentBalance = totalAmtVal - totalPaid;
 
             content.innerHTML = `
-                <div id="pdfInvoice" class="p-6 bg-white space-y-3 w-full" style="width: 100%; max-width: 600px; margin: auto; background-color: #ffffff;">
+                <div class="p-6 bg-white space-y-3 w-full" style="width: 100%; max-width: 600px; margin: auto; background-color: #ffffff;">
                     <div class="text-center border-b pb-2">
                         <h2 class="text-lg font-bold text-blue-800">Thaj Fabrications, Kalikavu</h2>
                         <p class="text-xs text-gray-500">Mob: 9020322647</p>
@@ -520,7 +523,7 @@
                     <button onclick="document.getElementById('detailModal').classList.add('hidden')" class="w-1/3 bg-gray-400 text-white py-2.5 rounded-full font-bold shadow">Close</button>
                 </div>
                 <div class="pt-2">
-                    <button onclick="downloadPDF()" class="w-full bg-blue-600 text-white py-3 rounded-full font-bold shadow-md">Download PDF</button>
+                    <button onclick='downloadPDF(${JSON.stringify(data)}, ${currentBalance}, ${totalPaid})' class="w-full bg-blue-600 text-white py-3 rounded-full font-bold shadow-md">Download PDF</button>
                 </div>
             `;
             modal.classList.remove('hidden');
@@ -610,16 +613,67 @@
             });
         }
 
-        window.downloadPDF = function() {
-            let element = document.getElementById('pdfInvoice');
+        window.downloadPDF = function(data, currentBalance, totalPaid) {
+            let container = document.getElementById('pdfExportContainer');
+            container.style.display = 'block';
+            
+            let itemsHtml = "";
+            if(data.items) {
+                data.items.forEach(it => {
+                    itemsHtml += `<li style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 4px 0; font-size: 14px;"><span>${it.name} (${it.qty} Nos x ₹${it.price})</span> <strong>₹${it.qty * it.price}</strong></li>`;
+                });
+            }
+
+            let addPayHtml = "";
+            let advance = parseFloat(data.advanceAmount || 0);
+            if(data.additionalPayments) {
+                data.additionalPayments.forEach(ap => {
+                    addPayHtml += `<li style="display: flex; justify-content: space-between; font-size: 12px; color: green; padding: 3px 0; border-bottom: 1px solid #eee;"><span>Paid on ${ap.date}:</span> <strong>+ ₹${ap.amount}</strong></li>`;
+                });
+            }
+
+            container.innerHTML = `
+                <div style="padding: 20px; background: #ffffff; font-family: sans-serif; color: #000; width: 700px;">
+                    <div style="text-align: center; border-bottom: 2px solid #1e40af; padding-bottom: 10px; margin-bottom: 15px;">
+                        <h2 style="font-size: 22px; font-weight: bold; color: #1e40af; margin: 0;">Thaj Fabrications, Kalikavu</h2>
+                        <p style="font-size: 12px; color: #555; margin: 2px 0 0 0;">Mob: 9020322647</p>
+                    </div>
+                    <div style="font-size: 13px; margin-bottom: 15px; line-height: 1.5;">
+                        <p><strong>Date:</strong> ${data.date || 'N/A'}</p>
+                        <p><strong>Customer:</strong> ${data.customerName} ${data.houseName ? '('+data.houseName+')' : ''}</p>
+                        <p><strong>Phone:</strong> ${data.phone}</p>
+                        <p><strong>Location:</strong> ${data.location || ''}</p>
+                        ${data.careOf ? `<p><strong>C/O:</strong> ${data.careOf}</p>` : ''}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <h4 style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 4px; font-size: 14px; color: #333;">Items List:</h4>
+                        <ul style="list-style: none; padding: 0; margin: 5px 0;">${itemsHtml}</ul>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <h4 style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 4px; font-size: 14px; color: #333;">Payments:</h4>
+                        <ul style="list-style: none; padding: 0; margin: 5px 0;">
+                            <li style="display: flex; justify-content: space-between; font-size: 12px; color: #555; padding: 3px 0; border-bottom: 1px solid #eee;"><span>Advance Paid:</span> <strong>₹ ${advance}</strong></li>
+                            ${addPayHtml}
+                        </ul>
+                    </div>
+                    <div style="background: #f9fafb; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px;"><span>Total:</span> <span>${data.totalAmount}</span></div>
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; color: #dc2626;"><span>Balance Amount:</span> <span>₹ ${currentBalance}</span></div>
+                    </div>
+                </div>
+            `;
+
             let opt = {
                 margin:       5,
                 filename:     'Thaj_Fabrications_Bill.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 3, useCORS: true, logging: true },
+                html2canvas:  { scale: 2, useCORS: true, logging: true },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            html2pdf().from(element).set(opt).save();
+
+            html2pdf().from(container).set(opt).save().then(() => {
+                container.style.display = 'none';
+            });
         }
     </script>
 </body>
