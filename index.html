@@ -44,7 +44,6 @@
 
         <!-- Section 1: New Estimate -->
         <div id="sectionNew" class="space-y-4">
-            <!-- Step 1: Customer Details Form -->
             <div id="stepCustomer" class="bg-white p-4 md:p-6 rounded-lg shadow-md">
                 <h2 class="text-lg font-semibold mb-3 text-gray-700">Customer Details</h2>
                 <div class="grid grid-cols-1 gap-3 text-sm md:text-base">
@@ -72,7 +71,6 @@
                 <button onclick="proceedToProducts()" class="mt-4 w-full bg-blue-600 text-white p-2 rounded font-bold text-sm">Next: Add Products</button>
             </div>
 
-            <!-- Step 2: Products Section (Initially Hidden) -->
             <div id="stepProducts" class="bg-white p-4 md:p-6 rounded-lg shadow-md hidden space-y-4">
                 <div class="bg-blue-50 p-3 rounded border flex justify-between items-center">
                     <div>
@@ -475,14 +473,14 @@
             let currentBalance = totalAmtVal - totalPaid;
 
             content.innerHTML = `
-                <div id="pdfInvoice" class="p-6 bg-white space-y-3 w-full" style="width: 100%; max-width: 600px; margin: auto;">
+                <div id="pdfInvoice" class="p-6 bg-white space-y-3 w-full" style="width: 100%; max-width: 600px; margin: auto; background-color: #ffffff;">
                     <div class="text-center border-b pb-2">
                         <h2 class="text-lg font-bold text-blue-800">Thaj Fabrications, Kalikavu</h2>
                         <p class="text-xs text-gray-500">Mob: 9020322647</p>
                     </div>
-                    <div class="text-xs md:text-sm">
+                    <div class="text-xs md:text-sm space-y-1">
                         <p><strong>Date:</strong> ${data.date || 'N/A'}</p>
-                        <p><strong>Customer:</strong> ${data.customerName} (${data.houseName || ''})</p>
+                        <p><strong>Customer:</strong> ${data.customerName} ${data.houseName ? '('+data.houseName+')' : ''}</p>
                         <p><strong>Phone:</strong> ${data.phone}</p>
                         <p><strong>Location:</strong> ${data.location || ''}</p>
                         ${data.careOf ? `<p><strong>C/O:</strong> ${data.careOf}</p>` : ''}
@@ -613,10 +611,10 @@
         window.downloadPDF = function() {
             let element = document.getElementById('pdfInvoice');
             let opt = {
-                margin:       10,
+                margin:       5,
                 filename:     'Thaj_Fabrications_Bill.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
+                html2canvas:  { scale: 3, useCORS: true, logging: true },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             html2pdf().from(element).set(opt).save();
