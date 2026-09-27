@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saj Fabrications - Kalikavu | Estimate Generator</title>
+    <title>Thaj Fabrications - Kalikavu | Estimate Generator</title>
     <!-- Tailwind CSS for modern UI -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
@@ -12,7 +12,7 @@
     <div class="container mx-auto p-4 max-w-2xl">
         <!-- Header -->
         <div class="bg-blue-800 text-white p-6 rounded-lg shadow-md text-center mb-6">
-            <h1 class="text-2xl font-bold">സാജ് ഫാബ്രിക്കേഷൻസ്</h1>
+            <h1 class="text-2xl font-bold">താജ് ഫാബ്രിക്കേഷൻസ്</h1>
             <p class="text-lg">കാളികാവ്</p>
         </div>
 
@@ -30,7 +30,7 @@
                 </div>
                 <div>
                     <label class="block text-gray-600">ഫോൺ / വാട്സാപ്പ് നമ്പർ:</label>
-                    <input type="tel" id="custPhone" class="w-full p-2 border rounded" placeholder="10 അക്ക നമ്പർ">
+                    <input type="tel" id="custPhone" class="w-full p-2 border rounded" placeholder="10 അക്ക നമ്പർ (ഉദാ: 9847xxxxxx)">
                 </div>
                 <div>
                     <label class="block text-gray-600">സ്ഥലം:</label>
@@ -164,29 +164,35 @@
                     balanceAmount: balance,
                     timestamp: new Date()
                 });
-
-                // WhatsApp Message Generation
-                let msg = `*സാജ് ഫാബ്രിക്കേഷൻസ്, കാളികാവ്*\n\n`;
-                msg += `കസ്റ്റമർ: ${name} (${house})\n`;
-                msg += `സ്ഥലം: ${location}\n`;
-                msg += `ആകെ തുക: ${total}\n`;
-                msg += `അഡ്വാൻസ്: ₹ ${advance}\n`;
-                msg += `ബാലൻസ്: ${balance}\n\nനന്ദി!`;
-                
-                let encodedMsg = encodeURIComponent(msg);
-                window.open(`https://wa.me/91${phone}?text=${encodedMsg}`, '_blank');
-
             } catch (e) {
-                console.error("Error adding document: ", e);
-                alert("ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ ചെറിയൊരു തടസ്സമുണ്ടായി. വീണ്ടും ശ്രമിക്കുക.");
+                console.error("Firebase Error: ", e);
+                alert("ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ തടസ്സമുണ്ടായി. ഫയർബേസ് റൂൾസ് പരിശോധിക്കുക.");
+                return;
             }
+
+            // WhatsApp Message Generation
+            let msg = `*താജ് ഫാബ്രിക്കേഷൻസ്, കാളികാവ്*\n\n`;
+            msg += `കസ്റ്റമർ: ${name} (${house})\n`;
+            msg += `സ്ഥലം: ${location}\n`;
+            msg += `ആകെ തുക: ${total}\n`;
+            msg += `അഡ്വാൻസ്: ₹ ${advance}\n`;
+            msg += `ബാലൻസ്: ${balance}\n\nനന്ദി!`;
+            
+            let encodedMsg = encodeURIComponent(msg);
+            window.open(`https://wa.me/91${phone}?text=${encodedMsg}`, '_blank');
         }
 
         window.sendSMS = function() {
             let phone = document.getElementById('custPhone').value;
             let name = document.getElementById('custName').value;
             let total = document.getElementById('grandTotal').innerText;
-            let smsBody = encodeURIComponent(`Saj Fabrications: Hello ${name}, Your total estimate is ${total}. Thank you!`);
+            
+            if(!phone) {
+                alert("ദയവായി ഫോൺ നമ്പർ നൽകുക!");
+                return;
+            }
+
+            let smsBody = encodeURIComponent(`Thaj Fabrications: Hello ${name}, Your total estimate is ${total}. Thank you!`);
             window.open(`sms:${phone}?body=${smsBody}`);
         }
     </script>
