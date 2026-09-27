@@ -128,14 +128,28 @@
             <div id="productsListUI" class="space-y-2"></div>
         </div>
 
-        <!-- Section 3: Accounts / Search History -->
+        <!-- Section 3: Accounts / Search History & Reports -->
         <div id="sectionAcc" class="bg-white p-4 md:p-6 rounded-2xl shadow-md hidden space-y-4 text-sm md:text-base">
-            <h2 class="text-lg font-semibold text-gray-700">Search Customer Accounts</h2>
-            <div class="flex gap-2">
-                <input type="text" id="searchQuery" placeholder="Enter name or phone" class="w-full p-2.5 border rounded-xl">
-                <button onclick="searchAccounts()" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold shadow">Search</button>
+            <h2 class="text-lg font-semibold text-gray-700">Accounts & Reports</h2>
+            
+            <!-- Capsule Filter Buttons -->
+            <div class="flex gap-2 overflow-x-auto pb-2">
+                <button onclick="loadReport('thisMonth')" id="btnMonth" class="px-4 py-2 bg-blue-600 text-white rounded-full text-xs font-bold shadow">This Month</button>
+                <button onclick="loadReport('dateWise')" id="btnDate" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-xs font-bold shadow">Date Wise</button>
+                <button onclick="loadReport('balanceSheet')" id="btnBal" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-xs font-bold shadow">Balance Sheet</button>
             </div>
-            <div id="searchResults" class="space-y-3"></div>
+
+            <!-- Dynamic Filter Inputs -->
+            <div id="filterInputsContainer" class="hidden pt-2">
+                <input type="date" id="selectedDateFilter" class="w-full p-2.5 border rounded-xl text-sm" onchange="filterByDate()">
+            </div>
+
+            <div class="flex gap-2 pt-2">
+                <input type="text" id="searchQuery" placeholder="Search by name or phone" class="w-full p-2.5 border rounded-xl text-sm">
+                <button onclick="searchAccounts()" class="bg-blue-600 text-white px-5 py-2 rounded-full font-bold text-xs shadow">Search</button>
+            </div>
+
+            <div id="searchResults" class="space-y-3 pt-2"></div>
         </div>
 
         <!-- Detailed Customer View Modal -->
@@ -315,6 +329,7 @@
             } else {
                 document.getElementById('sectionAcc').classList.remove('hidden');
                 document.getElementById('tabAcc').className = "w-1/3 p-2.5 font-bold bg-blue-600 text-white text-center rounded-xl shadow";
+                loadReport('thisMonth');
             }
         }
 
@@ -375,7 +390,10 @@
                 return;
             }
 
-            let dateStr = new Date().toLocaleString();
+            let now = new Date();
+            let dateStr = now.toLocaleDateString();
+            let timeStr = now.toLocaleTimeString();
+            let fullDateTime = `${dateStr}, ${timeStr}`;
 
             try {
                 await addDoc(collection(db, "estimates"), {
@@ -388,7 +406,8 @@
                     totalAmount: total,
                     advanceAmount: advance,
                     balanceAmount: balanceVal,
-                    date: dateStr,
+                    date: fullDateTime,
+                    rawDate: now.toISOString().split('T')[0],
                     additionalPayments: []
                 });
             } catch (e) {
@@ -413,6 +432,105 @@
             
             let encodedMsg = encodeURIComponent(msg);
             window.open(`https://wa.me/91${phone}?text=${encodedMsg}`, '_blank');
+        }
+
+        window.loadReport = async function(type) {
+            document.getElementById('btnMonth').className = "px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-xs font-bold shadow";
+            document.getElementById('btnDate').className = "px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-xs font-bold shadow";
+            document.getElementById('btnBal').className = "px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-xs font-bold shadow";
+            
+            let filterContainer = document.getElementById('filterInputsContainer');
+            filterContainer.classList.add('hidden');
+
+            if(type === 'thisMonth') {
+                document.getElementById('btnMonth').className = "px-4 py-2 bg-blue-600 text-white rounded-full text-xs font-bold shadow";
+                fetchAndDisplayReports('thisMonth');
+            } else if(type === 'dateWise') {
+                document.getElementById('btnDate').className = "px-4 py-2 bg-blue-600 text-white rounded-full text-xs font-bold shadow";
+                filterContainer.classList.remove('hidden');
+            } else if(type === 'balanceSheet') {
+                document.getElementById('btnBal').className = "px-4 py-2 bg-blue-600 text-white rounded-full text-xs font-bold shadow";
+                fetchAndDisplayReports('balanceSheet');
+            }
+        }
+
+        window.filterByDate = function() {
+            let selectedDate = document.getElementById('selectedDateFilter').value;
+            if(selectedDate) {
+                fetchAndDisplayReports('dateWise', selectedDate);
+            }
+        }
+
+        async function fetchAndDisplayReports(mode, filterParam) {
+            let resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = "Loading reports...";
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "estimates"));
+                let records = [];
+                querySnapshot.forEach((docSnap) => {
+                    let data = docSnap.data();
+                    data.id = docSnap.id;
+                    records.push(data);
+                });
+
+                resultsDiv.innerHTML = "";
+                let currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
+                let filtered = records;
+
+                if(mode === 'thisMonth') {
+                    filtered = records.filter(r => r.rawDate && r.rawDate.startsWith(currentMonth));
+                } else if(mode === 'dateWise' && filterParam) {
+                    filtered = records.filter(r => r.rawDate === filterParam);
+                }
+
+                if(filtered.length === 0) {
+                    resultsDiv.innerHTML = "<p class='text-gray-500 text-sm'>No records found for this selection.</p>";
+                    return;
+                }
+
+                if(mode === 'balanceSheet') {
+                    let totalBusiness = 0;
+                    let totalCollected = 0;
+                    let totalBalance = 0;
+
+                    filtered.forEach(r => {
+                        let tot = parseFloat(r.totalAmount.replace(/[^0-9.]/g, '')) || 0;
+                        let adv = parseFloat(r.advanceAmount || 0);
+                        let addPaid = 0;
+                        if(r.additionalPayments) {
+                            r.additionalPayments.forEach(ap => addPaid += parseFloat(ap.amount));
+                        }
+                        totalBusiness += tot;
+                        let paid = adv + addPaid;
+                        totalCollected += paid;
+                        totalBalance += (tot - paid);
+                    });
+
+                    resultsDiv.innerHTML = `
+                        <div class="p-4 bg-blue-50 border rounded-2xl space-y-2 text-sm shadow-sm">
+                            <h3 class="font-bold text-blue-900 border-b pb-1">Balance Sheet Summary</h3>
+                            <div class="flex justify-between"><span>Total Business:</span> <strong>₹ ${totalBusiness}</strong></div>
+                            <div class="flex justify-between text-green-700"><span>Total Collected:</span> <strong>₹ ${totalCollected}</strong></div>
+                            <div class="flex justify-between text-red-600 font-bold"><span>Total Pending Balance:</span> <strong>₹ ${totalBalance}</strong></div>
+                        </div>
+                    `;
+                }
+
+                filtered.forEach(data => {
+                    let itemHtml = `<div class="p-3.5 border rounded-2xl bg-gray-50 shadow-sm cursor-pointer hover:bg-blue-50 text-sm" onclick='showCustomerDetail(${JSON.stringify(data)})'>
+                        <p><strong>Name:</strong> ${data.customerName} (${data.houseName || ''})</p>
+                        <p><strong>Phone:</strong> ${data.phone}</p>
+                        <p><strong>Date:</strong> ${data.date || 'N/A'}</p>
+                        <p class="text-blue-700 font-semibold mt-1">Total: ${data.totalAmount} | Balance: ₹${data.balanceAmount}</p>
+                    </div>`;
+                    resultsDiv.innerHTML += itemHtml;
+                });
+
+            } catch (e) {
+                console.error("Report error: ", e);
+                resultsDiv.innerHTML = "Error loading reports.";
+            }
         }
 
         window.searchAccounts = async function() {
