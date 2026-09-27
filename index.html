@@ -11,17 +11,17 @@
 
     <!-- Login Screen -->
     <div id="loginScreen" class="fixed inset-0 bg-blue-900 flex justify-center items-center z-50 p-4">
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full space-y-4 text-center">
+        <div class="bg-white p-6 rounded-2xl shadow-xl max-w-sm w-full space-y-4 text-center">
             <h2 class="text-xl font-bold text-blue-900">Thaj Fabrications</h2>
-            <p class="text-sm text-gray-600">ദയവായി പാസ്‌വേഡ് നൽകുക</p>
-            <input type="password" id="passInput" placeholder="Password (default: 1234)" class="w-full p-2 border rounded text-center">
-            <button onclick="checkPassword()" class="w-full bg-blue-600 text-white p-2 rounded font-bold hover:bg-blue-700">Login</button>
+            <p class="text-sm text-gray-600">Dayavayi password nalkuka</p>
+            <input type="password" id="passInput" placeholder="Password (default: 1234)" class="w-full p-2 border rounded-full text-center">
+            <button onclick="checkPassword()" class="w-full bg-blue-600 text-white p-2.5 rounded-full font-bold hover:bg-blue-700 shadow-md">Login</button>
         </div>
     </div>
 
     <!-- Custom Alert / Confirm Modal -->
     <div id="appModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex justify-center items-center p-3 z-50">
-        <div class="bg-white rounded-lg p-5 max-w-sm w-full text-center space-y-4 shadow-xl">
+        <div class="bg-white rounded-2xl p-5 max-w-sm w-full text-center space-y-4 shadow-xl">
             <p id="appModalText" class="text-gray-800 font-medium"></p>
             <div id="appModalButtons" class="flex justify-center gap-2"></div>
         </div>
@@ -29,116 +29,118 @@
 
     <div class="container mx-auto p-3 max-w-md md:max-w-2xl hidden" id="mainApp">
         <!-- Header -->
-        <div class="bg-blue-800 text-white p-4 rounded-lg shadow-md text-center mb-4 relative">
-            <h1 class="text-xl md:text-2xl font-bold">Thaj Fabrications, Kalikavu</h1>
-            <p class="text-xs md:text-sm mt-1">Mob: 9020322647</p>
-            <button onclick="logout()" class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs">Logout</button>
+        <div class="bg-blue-800 text-white p-4 rounded-2xl shadow-md mb-4 flex flex-col md:flex-row justify-between items-center relative gap-2">
+            <div class="text-center md:text-left">
+                <h1 class="text-xl md:text-2xl font-bold">Thaj Fabrications, Kalikavu</h1>
+                <p class="text-xs md:text-sm mt-0.5">Mob: 9020322647</p>
+            </div>
+            <button onclick="logout()" class="bg-red-600 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-md hover:bg-red-700">Logout</button>
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="flex mb-4 bg-white rounded-lg shadow overflow-hidden text-sm md:text-base">
-            <button onclick="switchTab('newEstimate')" id="tabNew" class="w-1/3 p-2 md:p-3 font-bold bg-blue-600 text-white text-center">Estimate</button>
-            <button onclick="switchTab('manageProducts')" id="tabProd" class="w-1/3 p-2 md:p-3 font-bold bg-gray-200 text-gray-700 text-center">Products</button>
-            <button onclick="switchTab('accounts')" id="tabAcc" class="w-1/3 p-2 md:p-3 font-bold bg-gray-200 text-gray-700 text-center">Accounts</button>
+        <div class="flex mb-4 bg-white rounded-2xl shadow overflow-hidden text-sm md:text-base p-1 gap-1">
+            <button onclick="switchTab('newEstimate')" id="tabNew" class="w-1/3 p-2.5 font-bold bg-blue-600 text-white text-center rounded-xl shadow">Estimate</button>
+            <button onclick="switchTab('manageProducts')" id="tabProd" class="w-1/3 p-2.5 font-bold bg-gray-100 text-gray-700 text-center rounded-xl">Products</button>
+            <button onclick="switchTab('accounts')" id="tabAcc" class="w-1/3 p-2.5 font-bold bg-gray-100 text-gray-700 text-center rounded-xl">Accounts</button>
         </div>
 
         <!-- Section 1: New Estimate -->
         <div id="sectionNew" class="space-y-4">
-            <div id="stepCustomer" class="bg-white p-4 md:p-6 rounded-lg shadow-md">
+            <div id="stepCustomer" class="bg-white p-4 md:p-6 rounded-2xl shadow-md">
                 <h2 class="text-lg font-semibold mb-3 text-gray-700">Customer Details</h2>
                 <div class="grid grid-cols-1 gap-3 text-sm md:text-base">
                     <div>
                         <label class="block text-gray-600">Name:</label>
-                        <input type="text" id="custName" class="w-full p-2 border rounded" placeholder="Customer's name">
+                        <input type="text" id="custName" class="w-full p-2.5 border rounded-xl" placeholder="Customer's name">
                     </div>
                     <div>
                         <label class="block text-gray-600">House Name:</label>
-                        <input type="text" id="houseName" class="w-full p-2 border rounded" placeholder="House name">
+                        <input type="text" id="houseName" class="w-full p-2.5 border rounded-xl" placeholder="House name">
                     </div>
                     <div>
                         <label class="block text-gray-600">Phone / WhatsApp No:</label>
-                        <input type="tel" id="custPhone" class="w-full p-2 border rounded" placeholder="10 digit number">
+                        <input type="tel" id="custPhone" class="w-full p-2.5 border rounded-xl" placeholder="10 digit number">
                     </div>
                     <div>
                         <label class="block text-gray-600">Location:</label>
-                        <input type="text" id="custLocation" class="w-full p-2 border rounded" placeholder="Location">
+                        <input type="text" id="custLocation" class="w-full p-2.5 border rounded-xl" placeholder="Location">
                     </div>
                     <div>
                         <label class="block text-gray-600">Care Of (C/O):</label>
-                        <input type="text" id="custCof" class="w-full p-2 border rounded" placeholder="C/O if any">
+                        <input type="text" id="custCof" class="w-full p-2.5 border rounded-xl" placeholder="C/O if any">
                     </div>
                 </div>
-                <button onclick="proceedToProducts()" class="mt-4 w-full bg-blue-600 text-white p-2 rounded font-bold text-sm">Next: Add Products</button>
+                <button onclick="proceedToProducts()" class="mt-4 w-full bg-blue-600 text-white p-3 rounded-full font-bold text-sm shadow-md hover:bg-blue-700">Next: Add Products</button>
             </div>
 
-            <div id="stepProducts" class="bg-white p-4 md:p-6 rounded-lg shadow-md hidden space-y-4">
-                <div class="bg-blue-50 p-3 rounded border flex justify-between items-center">
+            <div id="stepProducts" class="bg-white p-4 md:p-6 rounded-2xl shadow-md hidden space-y-4">
+                <div class="bg-blue-50 p-3 rounded-xl border flex justify-between items-center">
                     <div>
                         <p class="text-xs text-gray-500">Customer:</p>
                         <p id="savedCustDisplay" class="font-bold text-blue-900"></p>
                     </div>
-                    <button onclick="editCustomerDetails()" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Edit Details</button>
+                    <button onclick="editCustomerDetails()" class="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow">Edit Details</button>
                 </div>
 
                 <div class="flex justify-between items-center mb-3">
                     <h2 class="text-lg font-semibold text-gray-700">Products Selection</h2>
-                    <button onclick="addItemRow()" class="bg-indigo-600 text-white px-3 py-1 rounded text-xs md:text-sm font-bold">+ Add Item</button>
+                    <button onclick="addItemRow()" class="bg-indigo-600 text-white px-3.5 py-1.5 rounded-full text-xs md:text-sm font-bold shadow">+ Add Item</button>
                 </div>
                 
                 <div id="itemsContainer" class="space-y-3">
                     <div class="item-row grid grid-cols-12 gap-1 md:gap-2 items-center border-b pb-3">
-                        <select class="item-name col-span-5 p-2 border rounded bg-white text-xs md:text-sm"></select>
-                        <input type="number" placeholder="Qty" class="item-qty col-span-2 p-2 border rounded text-center text-xs md:text-sm" oninput="calculateTotal()">
-                        <input type="number" placeholder="Price" class="item-price col-span-4 p-2 border rounded text-center text-xs md:text-sm" oninput="calculateTotal()">
+                        <select class="item-name col-span-5 p-2.5 border rounded-xl bg-white text-xs md:text-sm"></select>
+                        <input type="number" placeholder="Qty" class="item-qty col-span-2 p-2.5 border rounded-xl text-center text-xs md:text-sm" oninput="calculateTotal()">
+                        <input type="number" placeholder="Price" class="item-price col-span-4 p-2.5 border rounded-xl text-center text-xs md:text-sm" oninput="calculateTotal()">
                         <button onclick="this.parentElement.remove(); calculateTotal();" class="col-span-1 text-red-600 font-bold text-center">X</button>
                     </div>
                 </div>
 
-                <div class="mt-4 p-3 bg-gray-50 rounded border text-sm md:text-base">
+                <div class="mt-4 p-4 bg-gray-50 rounded-xl border text-sm md:text-base space-y-2">
                     <div class="flex justify-between font-bold">
                         <span>Grand Total:</span>
                         <span id="grandTotal">₹ 0</span>
                     </div>
-                    <div class="mt-3">
+                    <div>
                         <label class="block text-gray-600">Advance Amount:</label>
-                        <input type="number" id="advanceAmt" placeholder="₹" class="w-full p-2 border rounded text-sm md:text-base" oninput="calculateTotal()">
+                        <input type="number" id="advanceAmt" placeholder="₹" class="w-full p-2.5 border rounded-xl text-sm md:text-base" oninput="calculateTotal()">
                     </div>
-                    <div class="flex justify-between font-semibold mt-2 text-red-600">
+                    <div class="flex justify-between font-semibold text-red-600 pt-1">
                         <span>Balance Amount:</span>
                         <span id="balanceAmt">₹ 0</span>
                     </div>
                 </div>
 
-                <button onclick="saveAndSendWhatsApp()" class="w-full bg-green-600 text-white p-3 rounded-lg font-bold hover:bg-green-700 text-center text-sm md:text-base">
+                <button onclick="saveAndSendWhatsApp()" class="w-full bg-green-600 text-white p-3.5 rounded-full font-bold shadow-md hover:bg-green-700 text-center text-sm md:text-base">
                     Save & Send WhatsApp Bill
                 </button>
             </div>
         </div>
 
         <!-- Section 2: Manage Products Menu -->
-        <div id="sectionProducts" class="bg-white p-4 md:p-6 rounded-lg shadow-md hidden space-y-4 text-sm md:text-base">
+        <div id="sectionProducts" class="bg-white p-4 md:p-6 rounded-2xl shadow-md hidden space-y-4 text-sm md:text-base">
             <h2 class="text-lg font-semibold text-gray-700">Manage Products Menu</h2>
             <div class="flex gap-2">
-                <input type="text" id="newProductName" placeholder="Enter product name" class="w-full p-2 border rounded">
-                <button onclick="addNewProduct()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">Add</button>
+                <input type="text" id="newProductName" placeholder="Enter product name" class="w-full p-2.5 border rounded-xl">
+                <button onclick="addNewProduct()" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold shadow">Add</button>
             </div>
             <h3 class="font-medium text-gray-600 mt-3">Current Products List:</h3>
             <div id="productsListUI" class="space-y-2"></div>
         </div>
 
         <!-- Section 3: Accounts / Search History -->
-        <div id="sectionAcc" class="bg-white p-4 md:p-6 rounded-lg shadow-md hidden space-y-4 text-sm md:text-base">
+        <div id="sectionAcc" class="bg-white p-4 md:p-6 rounded-2xl shadow-md hidden space-y-4 text-sm md:text-base">
             <h2 class="text-lg font-semibold text-gray-700">Search Customer Accounts</h2>
             <div class="flex gap-2">
-                <input type="text" id="searchQuery" placeholder="Enter name or phone" class="w-full p-2 border rounded">
-                <button onclick="searchAccounts()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">Search</button>
+                <input type="text" id="searchQuery" placeholder="Enter name or phone" class="w-full p-2.5 border rounded-xl">
+                <button onclick="searchAccounts()" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold shadow">Search</button>
             </div>
             <div id="searchResults" class="space-y-3"></div>
         </div>
 
         <!-- Detailed Customer View Modal -->
         <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center p-3 z-40">
-            <div class="bg-white rounded-lg p-4 md:p-6 max-w-lg w-full max-h-screen overflow-y-auto space-y-3" id="modalContent"></div>
+            <div class="bg-white rounded-2xl p-4 md:p-6 max-w-lg w-full max-h-screen overflow-y-auto space-y-3 shadow-2xl" id="modalContent"></div>
         </div>
     </div>
 
@@ -167,7 +169,7 @@
             let textElem = document.getElementById('appModalText');
             let btnDiv = document.getElementById('appModalButtons');
             textElem.innerText = message;
-            btnDiv.innerHTML = `<button onclick="document.getElementById('appModal').classList.add('hidden'); ${callback ? callback + '()' : ''}" class="bg-blue-600 text-white px-4 py-2 rounded font-bold text-sm">OK</button>`;
+            btnDiv.innerHTML = `<button onclick="document.getElementById('appModal').classList.add('hidden'); ${callback ? callback + '()' : ''}" class="bg-blue-600 text-white px-5 py-2 rounded-full font-bold text-sm shadow">OK</button>`;
             modal.classList.remove('hidden');
         }
 
@@ -177,8 +179,8 @@
             let btnDiv = document.getElementById('appModalButtons');
             textElem.innerText = message;
             btnDiv.innerHTML = `
-                <button id="confirmYes" class="bg-red-600 text-white px-4 py-2 rounded font-bold text-sm">Yes</button>
-                <button onclick="document.getElementById('appModal').classList.add('hidden')" class="bg-gray-400 text-white px-4 py-2 rounded font-bold text-sm">Cancel</button>
+                <button id="confirmYes" class="bg-red-600 text-white px-5 py-2 rounded-full font-bold text-sm shadow">Yes</button>
+                <button onclick="document.getElementById('appModal').classList.add('hidden')" class="bg-gray-400 text-white px-5 py-2 rounded-full font-bold text-sm shadow">Cancel</button>
             `;
             modal.classList.remove('hidden');
             document.getElementById('confirmYes').onclick = function() {
@@ -194,7 +196,7 @@
                 document.getElementById('mainApp').classList.remove('hidden');
                 loadProductsIntoSelects();
             } else {
-                showAppAlert("തെറ്റായ പാസ്‌വേഡ്!");
+                showAppAlert("Tettaya password!");
             }
         }
 
@@ -242,12 +244,12 @@
             div.innerHTML = "";
             defaultProducts.forEach((prod, index) => {
                 let itemDiv = document.createElement('div');
-                itemDiv.className = "flex justify-between items-center bg-gray-50 p-2 rounded border";
+                itemDiv.className = "flex justify-between items-center bg-gray-50 p-3 rounded-xl border";
                 itemDiv.innerHTML = `
-                    <span>${prod}</span>
+                    <span class="font-medium">${prod}</span>
                     <div class="space-x-2">
-                        <button onclick="editProduct(${index})" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Edit</button>
-                        <button onclick="deleteProduct(${index})" class="bg-red-600 text-white px-2 py-1 rounded text-xs">Delete</button>
+                        <button onclick="editProduct(${index})" class="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow">Edit</button>
+                        <button onclick="deleteProduct(${index})" class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow">Delete</button>
                     </div>
                 `;
                 div.appendChild(itemDiv);
@@ -273,7 +275,7 @@
 
         window.editProduct = function(index) {
             let oldName = defaultProducts[index];
-            let newName = prompt("പ്രൊഡക്റ്റിന്റെ പുതിയ പേര് നൽകുക:", oldName);
+            let newName = prompt("Enter new product name:", oldName);
             if(newName && newName.trim() !== "") {
                 defaultProducts[index] = newName.trim();
                 loadProductsIntoSelects();
@@ -283,7 +285,7 @@
         }
 
         window.deleteProduct = function(index) {
-            showAppConfirm("ഈ പ്രൊഡക്റ്റ് ഒഴിവാക്കണമെന്നുറപ്പാണോ?", function() {
+            showAppConfirm("Are you sure you want to delete this product?", function() {
                 defaultProducts.splice(index, 1);
                 loadProductsIntoSelects();
                 loadProductManagementList();
@@ -296,20 +298,20 @@
             document.getElementById('sectionProducts').classList.add('hidden');
             document.getElementById('sectionAcc').classList.add('hidden');
 
-            document.getElementById('tabNew').className = "w-1/3 p-2 md:p-3 font-bold bg-gray-200 text-gray-700 text-center";
-            document.getElementById('tabProd').className = "w-1/3 p-2 md:p-3 font-bold bg-gray-200 text-gray-700 text-center";
-            document.getElementById('tabAcc').className = "w-1/3 p-2 md:p-3 font-bold bg-gray-200 text-gray-700 text-center";
+            document.getElementById('tabNew').className = "w-1/3 p-2.5 font-bold bg-gray-100 text-gray-700 text-center rounded-xl";
+            document.getElementById('tabProd').className = "w-1/3 p-2.5 font-bold bg-gray-100 text-gray-700 text-center rounded-xl";
+            document.getElementById('tabAcc').className = "w-1/3 p-2.5 font-bold bg-gray-100 text-gray-700 text-center rounded-xl";
 
             if(tab === 'newEstimate') {
                 document.getElementById('sectionNew').classList.remove('hidden');
-                document.getElementById('tabNew').className = "w-1/3 p-2 md:p-3 font-bold bg-blue-600 text-white text-center";
+                document.getElementById('tabNew').className = "w-1/3 p-2.5 font-bold bg-blue-600 text-white text-center rounded-xl shadow";
             } else if(tab === 'manageProducts') {
                 document.getElementById('sectionProducts').classList.remove('hidden');
-                document.getElementById('tabProd').className = "w-1/3 p-2 md:p-3 font-bold bg-blue-600 text-white text-center";
+                document.getElementById('tabProd').className = "w-1/3 p-2.5 font-bold bg-blue-600 text-white text-center rounded-xl shadow";
                 loadProductManagementList();
             } else {
                 document.getElementById('sectionAcc').classList.remove('hidden');
-                document.getElementById('tabAcc').className = "w-1/3 p-2 md:p-3 font-bold bg-blue-600 text-white text-center";
+                document.getElementById('tabAcc').className = "w-1/3 p-2.5 font-bold bg-blue-600 text-white text-center rounded-xl shadow";
             }
         }
 
@@ -318,9 +320,9 @@
             let row = document.createElement('div');
             row.className = "item-row grid grid-cols-12 gap-1 md:gap-2 items-center border-b pb-3";
             row.innerHTML = `
-                <select class="item-name col-span-5 p-2 border rounded bg-white text-xs md:text-sm"></select>
-                <input type="number" placeholder="Qty" class="item-qty col-span-2 p-2 border rounded text-center text-xs md:text-sm" oninput="calculateTotal()">
-                <input type="number" placeholder="Price" class="item-price col-span-4 p-2 border rounded text-center text-xs md:text-sm" oninput="calculateTotal()">
+                <select class="item-name col-span-5 p-2.5 border rounded-xl bg-white text-xs md:text-sm"></select>
+                <input type="number" placeholder="Qty" class="item-qty col-span-2 p-2.5 border rounded-xl text-center text-xs md:text-sm" oninput="calculateTotal()">
+                <input type="number" placeholder="Price" class="item-price col-span-4 p-2.5 border rounded-xl text-center text-xs md:text-sm" oninput="calculateTotal()">
                 <button onclick="this.parentElement.remove(); calculateTotal();" class="col-span-1 text-red-600 font-bold text-center">X</button>
             `;
             container.appendChild(row);
@@ -430,7 +432,7 @@
                     data.id = docSnap.id;
                     if(data.customerName.toLowerCase().includes(queryText.toLowerCase()) || data.phone.includes(queryText)) {
                         found = true;
-                        let itemHtml = `<div class="p-3 border rounded bg-gray-50 shadow-sm cursor-pointer hover:bg-blue-50 text-sm" onclick='showCustomerDetail(${JSON.stringify(data)})'>
+                        let itemHtml = `<div class="p-3.5 border rounded-2xl bg-gray-50 shadow-sm cursor-pointer hover:bg-blue-50 text-sm" onclick='showCustomerDetail(${JSON.stringify(data)})'>
                             <p><strong>Name:</strong> ${data.customerName} (${data.houseName || ''})</p>
                             <p><strong>Phone:</strong> ${data.phone}</p>
                             <p><strong>Date:</strong> ${data.date || 'N/A'}</p>
@@ -496,29 +498,29 @@
                             ${addPayHtml}
                         </ul>
                     </div>
-                    <div class="bg-gray-50 p-2 rounded border space-y-1 text-xs md:text-sm">
+                    <div class="bg-gray-50 p-2 rounded-xl border space-y-1 text-xs md:text-sm">
                         <div class="flex justify-between font-bold"><span>Total:</span> <span>${data.totalAmount}</span></div>
                         <div class="flex justify-between font-semibold text-red-600"><span>Balance Amount:</span> <span>₹ ${currentBalance}</span></div>
                     </div>
                 </div>
 
                 <!-- Add More Payment Section -->
-                <div class="p-3 bg-gray-100 rounded space-y-2">
+                <div class="p-3 bg-gray-100 rounded-xl space-y-2">
                     <label class="block text-xs font-bold text-gray-700">Add New Payment:</label>
                     <div class="flex gap-2">
-                        <input type="number" id="addPayInput" placeholder="Amount (₹)" class="w-full p-2 border rounded text-sm">
-                        <button onclick='recordAdditionalPayment("${data.id}", "${data.phone}", ${currentBalance}, ${totalAmtVal}, ${JSON.stringify(data.additionalPayments || [])})' class="bg-green-600 text-white px-3 py-1 rounded text-xs font-bold">Add & Send</button>
+                        <input type="number" id="addPayInput" placeholder="Amount (₹)" class="w-full p-2.5 border rounded-xl text-sm">
+                        <button onclick='recordAdditionalPayment("${data.id}", "${data.phone}", ${currentBalance}, ${totalAmtVal}, ${JSON.stringify(data.additionalPayments || [])})' class="bg-green-600 text-white px-4 py-2.5 rounded-full font-bold text-xs shadow">Add & Send</button>
                     </div>
                 </div>
 
                 <!-- Edit and Cancel Buttons -->
                 <div class="flex gap-2 pt-2 text-sm">
-                    <button onclick='editRecord(${JSON.stringify(data)})' class="w-1/3 bg-yellow-600 text-white py-2 rounded font-bold">Edit</button>
-                    <button onclick='cancelRecord("${data.id}")' class="w-1/3 bg-red-600 text-white py-2 rounded font-bold">Cancel Bill</button>
-                    <button onclick="document.getElementById('detailModal').classList.add('hidden')" class="w-1/3 bg-gray-400 text-white py-2 rounded font-bold">Close</button>
+                    <button onclick='editRecord(${JSON.stringify(data)})' class="w-1/3 bg-yellow-600 text-white py-2.5 rounded-full font-bold shadow">Edit</button>
+                    <button onclick='cancelRecord("${data.id}")' class="w-1/3 bg-red-600 text-white py-2.5 rounded-full font-bold shadow">Cancel Bill</button>
+                    <button onclick="document.getElementById('detailModal').classList.add('hidden')" class="w-1/3 bg-gray-400 text-white py-2.5 rounded-full font-bold shadow">Close</button>
                 </div>
                 <div class="pt-2">
-                    <button onclick="downloadPDF()" class="w-full bg-blue-600 text-white py-2 rounded font-bold">Download PDF</button>
+                    <button onclick="downloadPDF()" class="w-full bg-blue-600 text-white py-3 rounded-full font-bold shadow-md">Download PDF</button>
                 </div>
             `;
             modal.classList.remove('hidden');
@@ -579,11 +581,11 @@
                     let row = document.createElement('div');
                     row.className = "item-row grid grid-cols-12 gap-1 md:gap-2 items-center border-b pb-3";
                     row.innerHTML = `
-                        <select class="item-name col-span-5 p-2 border rounded bg-white text-xs md:text-sm">
+                        <select class="item-name col-span-5 p-2.5 border rounded-xl bg-white text-xs md:text-sm">
                             <option value="${it.name}" selected>${it.name}</option>
                         </select>
-                        <input type="number" value="${it.qty}" placeholder="Qty" class="item-qty col-span-2 p-2 border rounded text-center text-xs md:text-sm" oninput="calculateTotal()">
-                        <input type="number" value="${it.price}" placeholder="Price" class="item-price col-span-4 p-2 border rounded text-center text-xs md:text-sm" oninput="calculateTotal()">
+                        <input type="number" value="${it.qty}" placeholder="Qty" class="item-qty col-span-2 p-2.5 border rounded-xl text-center text-xs md:text-sm" oninput="calculateTotal()">
+                        <input type="number" value="${it.price}" placeholder="Price" class="item-price col-span-4 p-2.5 border rounded-xl text-center text-xs md:text-sm" oninput="calculateTotal()">
                         <button onclick="this.parentElement.remove(); calculateTotal();" class="col-span-1 text-red-600 font-bold text-center">X</button>
                     `;
                     container.appendChild(row);
@@ -595,7 +597,7 @@
         }
 
         window.cancelRecord = async function(docId) {
-            showAppConfirm("ഈ ബിൽ കാൻസൽ ചെയ്യുകയോ ഡിലീറ്റ് ചെയ്യുകയോ ചെയ്യണമെന്ന് ഉറപ്പാണോ?", async function() {
+            showAppConfirm("Are you sure you want to cancel this bill?", async function() {
                 try {
                     await deleteDoc(doc(db, "estimates", docId));
                     document.getElementById('detailModal').classList.add('hidden');
