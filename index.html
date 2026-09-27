@@ -50,23 +50,27 @@
                 </div>
             </div>
 
-            <!-- Dynamic Items Selection -->
+            <!-- Products / Items Selection -->
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-gray-700">സാധനങ്ങളുടെ വിവരങ്ങൾ</h2>
-                    <button onclick="addItemRow()" class="bg-indigo-600 text-white px-3 py-1 rounded text-sm font-bold">+ പുതിയ സാധനം ചേർക്കുക</button>
+                    <h2 class="text-xl font-semibold text-gray-700">സാധനങ്ങളുടെ വിവരങ്ങൾ (Products)</h2>
+                    <button onclick="addItemRow()" class="bg-indigo-600 text-white px-3 py-1 rounded text-sm font-bold">+ പുതിയ പ്രൊഡക്റ്റ് ചേർക്കുക</button>
                 </div>
                 
                 <div id="itemsContainer" class="space-y-3">
-                    <!-- Default Item Rows -->
+                    <!-- Default Item Row -->
                     <div class="item-row grid grid-cols-12 gap-2 items-center border-b pb-3">
-                        <select class="item-name col-span-5 p-2 border rounded bg-white">
-                            <option value="വാതിൽ (Door)">വാതിൽ (Door)</option>
-                            <option value="ജനൽ (Window)">ജനൽ (Window)</option>
-                            <option value="അലമാര (Almarah)">അലമാര (Almarah)</option>
-                            <option value="ഗേറ്റ് (Gate)">ഗേറ്റ് (Gate)</option>
-                            <option value="ഗ്രിൽ (Grill)">ഗ്രിൽ (Grill)</option>
-                        </select>
+                        <div class="col-span-5 space-y-1">
+                            <select class="item-name w-full p-2 border rounded bg-white" onchange="checkCustomItem(this)">
+                                <option value="വാതിൽ (Door)">വാതിൽ (Door)</option>
+                                <option value="ജനൽ (Window)">ജനൽ (Window)</option>
+                                <option value="അലമാര (Almarah)">അലമാര (Almarah)</option>
+                                <option value="ഗേറ്റ് (Gate)">ഗേറ്റ് (Gate)</option>
+                                <option value="ഗ്രിൽ (Grill)">ഗ്രിൽ (Grill)</option>
+                                <option value="custom"> മറ്റു സാധനം (പുതിയത് ചേർക്കുക)</option>
+                            </select>
+                            <input type="text" placeholder="പ്രൊഡക്റ്റ് പേര് എഴുതുക" class="custom-item-name w-full p-2 border rounded text-sm hidden" style="margin-top: 4px;">
+                        </div>
                         <input type="number" placeholder="എണ്ണം" class="item-qty col-span-2 p-2 border rounded text-center" oninput="calculateTotal()">
                         <input type="number" placeholder="വില (₹)" class="item-price col-span-4 p-2 border rounded text-center" oninput="calculateTotal()">
                         <button onclick="this.parentElement.remove(); calculateTotal();" class="col-span-1 text-red-600 font-bold text-center">X</button>
@@ -93,7 +97,7 @@
             <!-- Action Buttons -->
             <div class="flex flex-col gap-3">
                 <button onclick="saveAndSendWhatsApp()" class="bg-green-600 text-white p-3 rounded-lg font-bold hover:bg-green-700 text-center">
-                    ഡാറ്റ സേവ് ചെയ്ത് WhatsApp അയക്കുക (Mob & Name സഹിതം)
+                    ഡാറ്റ സേവ് ചെയ്ത് WhatsApp അയക്കുക
                 </button>
             </div>
         </div>
@@ -114,7 +118,7 @@
     <!-- Firebase SDKs and Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqTWN4ZtGgn0NW5MJiRxHFSL05gIPIgy4",
@@ -148,18 +152,33 @@
             let row = document.createElement('div');
             row.className = "item-row grid grid-cols-12 gap-2 items-center border-b pb-3";
             row.innerHTML = `
-                <select class="item-name col-span-5 p-2 border rounded bg-white">
-                    <option value="വാതിൽ (Door)">വാതിൽ (Door)</option>
-                    <option value="ജനൽ (Window)">ജനൽ (Window)</option>
-                    <option value="അലമാര (Almarah)">അലമാര (Almarah)</option>
-                    <option value="ഗേറ്റ് (Gate)">ഗേറ്റ് (Gate)</option>
-                    <option value="ഗ്രിൽ (Grill)">ഗ്രിൽ (Grill)</option>
-                </select>
+                <div class="col-span-5 space-y-1">
+                    <select class="item-name w-full p-2 border rounded bg-white" onchange="checkCustomItem(this)">
+                        <option value="വാതിൽ (Door)">വാതിൽ (Door)</option>
+                        <option value="ജനൽ (Window)">ജനൽ (Window)</option>
+                        <option value="അലമാര (Almarah)">അലമാര (Almarah)</option>
+                        <option value="ഗേറ്റ് (Gate)">ഗേറ്റ് (Gate)</option>
+                        <option value="ഗ്രിൽ (Grill)">ഗ്രിൽ (Grill)</option>
+                        <option value="custom"> മറ്റു സാധനം (പുതിയത് ചേർക്കുക)</option>
+                    </select>
+                    <input type="text" placeholder="പ്രൊഡക്റ്റ് പേര് എഴുതുക" class="custom-item-name w-full p-2 border rounded text-sm hidden" style="margin-top: 4px;">
+                </div>
                 <input type="number" placeholder="എണ്ണം" class="item-qty col-span-2 p-2 border rounded text-center" oninput="calculateTotal()">
                 <input type="number" placeholder="വില (₹)" class="item-price col-span-4 p-2 border rounded text-center" oninput="calculateTotal()">
                 <button onclick="this.parentElement.remove(); calculateTotal();" class="col-span-1 text-red-600 font-bold text-center">X</button>
             `;
             container.appendChild(row);
+        }
+
+        window.checkCustomItem = function(selectElem) {
+            let customInput = selectElem.parentElement.querySelector('.custom-item-name');
+            if(selectElem.value === 'custom') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+                customInput.value = '';
+            }
         }
 
         window.calculateTotal = function() {
@@ -196,13 +215,20 @@
             let itemsList = [];
             let rows = document.querySelectorAll('.item-row');
             rows.forEach(row => {
-                let itemName = row.querySelector('.item-name').value;
+                let selectVal = row.querySelector('.item-name').value;
+                let itemName = selectVal === 'custom' ? row.querySelector('.custom-item-name').value : selectVal;
                 let qty = row.querySelector('.item-qty').value || 0;
                 let price = row.querySelector('.item-price').value || 0;
-                if(qty > 0) {
+                
+                if(qty > 0 && itemName) {
                     itemsList.push({ name: itemName, qty: qty, price: price });
                 }
             });
+
+            if(itemsList.length === 0) {
+                alert("ദയവായി ഏതെങ്കിലും പ്രൊഡക്റ്റും എണ്ണവും വിലയും നൽകുക!");
+                return;
+            }
 
             try {
                 await addDoc(collection(db, "estimates"), {
@@ -223,7 +249,6 @@
                 return;
             }
 
-            // WhatsApp Message Format with Institution Name and Number
             let msg = `*താജ് ഫാബ്രിക്കേഷൻസ്, കാളികാവ്*\n`;
             msg += `*Mob: 9020322647*\n\n`;
             msg += `കസ്റ്റമർ: ${name} (${house})\n`;
@@ -241,7 +266,7 @@
             let encodedMsg = encodeURIComponent(msg);
             window.open(`https://wa.me/91${phone}?text=${encodedMsg}`, '_blank');
 
-            // Clear Form Fields After Saving
+            // Clear Form
             document.getElementById('custName').value = '';
             document.getElementById('houseName').value = '';
             document.getElementById('custPhone').value = '';
@@ -252,13 +277,17 @@
             document.getElementById('balanceAmt').innerText = '₹ 0';
             document.getElementById('itemsContainer').innerHTML = `
                 <div class="item-row grid grid-cols-12 gap-2 items-center border-b pb-3">
-                    <select class="item-name col-span-5 p-2 border rounded bg-white">
-                        <option value="വാതിൽ (Door)">വാതിൽ (Door)</option>
-                        <option value="ജനൽ (Window)">ജനൽ (Window)</option>
-                        <option value="അലമാര (Almarah)">അലമാര (Almarah)</option>
-                        <option value="ഗേറ്റ് (Gate)">ഗേറ്റ് (Gate)</option>
-                        <option value="ഗ്രിൽ (Grill)">ഗ്രിൽ (Grill)</option>
-                    </select>
+                    <div class="col-span-5 space-y-1">
+                        <select class="item-name w-full p-2 border rounded bg-white" onchange="checkCustomItem(this)">
+                            <option value="വാതിൽ (Door)">വാതിൽ (Door)</option>
+                            <option value="ജനൽ (Window)">ജനൽ (Window)</option>
+                            <option value="അലമാര (Almarah)">അലമാര (Almarah)</option>
+                            <option value="ഗേറ്റ് (Gate)">ഗേറ്റ് (Gate)</option>
+                            <option value="ഗ്രിൽ (Grill)">ഗ്രിൽ (Grill)</option>
+                            <option value="custom"> മറ്റു സാധനം (പുതിയത് ചേർക്കുക)</option>
+                        </select>
+                        <input type="text" placeholder="പ്രൊഡക്റ്റ് പേര് എഴുതുക" class="custom-item-name w-full p-2 border rounded text-sm hidden" style="margin-top: 4px;">
+                    </div>
                     <input type="number" placeholder="എണ്ണം" class="item-qty col-span-2 p-2 border rounded text-center" oninput="calculateTotal()">
                     <input type="number" placeholder="വില (₹)" class="item-price col-span-4 p-2 border rounded text-center" oninput="calculateTotal()">
                     <button onclick="this.parentElement.remove(); calculateTotal();" class="col-span-1 text-red-600 font-bold text-center">X</button>
@@ -285,11 +314,18 @@
                     let data = doc.data();
                     if(data.customerName.toLowerCase().includes(queryText.toLowerCase()) || data.phone.includes(queryText)) {
                         found = true;
-                        let itemHtml = `<div class="p-4 border rounded bg-gray-50 shadow-sm">
+                        let itemsText = "";
+                        if(data.items) {
+                            data.items.forEach(it => {
+                                itemsText += `<br>&nbsp;&nbsp;- ${it.name}: ${it.qty} എണ്ണം (₹${it.price})`;
+                            });
+                        }
+                        let itemHtml = `<div class="p-4 border rounded bg-gray-50 shadow-sm space-y-1">
                             <p><strong>പേര്:</strong> ${data.customerName} (${data.houseName})</p>
                             <p><strong>ഫോൺ:</strong> ${data.phone}</p>
                             <p><strong>സ്ഥലം:</strong> ${data.location}</p>
-                            <p><strong>ആകെ തുക:</strong> ${data.totalAmount} | <strong>ബാലൻസ്:</strong> ${data.balanceAmount}</p>
+                            <p><strong>സാധനങ്ങൾ:</strong> ${itemsText}</p>
+                            <p class="text-blue-700 font-semibold mt-2">ആകെ തുക: ${data.totalAmount} | ബാലൻസ്: ${data.balanceAmount}</p>
                         </div>`;
                         resultsDiv.innerHTML += itemHtml;
                     }
