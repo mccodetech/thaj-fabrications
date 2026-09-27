@@ -19,6 +19,14 @@
         </div>
     </div>
 
+    <!-- Custom Alert / Confirm Modal -->
+    <div id="appModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex justify-center items-center p-3 z-50">
+        <div class="bg-white rounded-lg p-5 max-w-sm w-full text-center space-y-4 shadow-xl">
+            <p id="appModalText" class="text-gray-800 font-medium"></p>
+            <div id="appModalButtons" class="flex justify-center gap-2"></div>
+        </div>
+    </div>
+
     <div class="container mx-auto p-3 max-w-md md:max-w-2xl hidden" id="mainApp">
         <!-- Header -->
         <div class="bg-blue-800 text-white p-4 rounded-lg shadow-md text-center mb-4 relative">
@@ -100,7 +108,7 @@
             </div>
         </div>
 
-        <!-- Section 2: Manage Products Menu (With Edit & Delete) -->
+        <!-- Section 2: Manage Products Menu -->
         <div id="sectionProducts" class="bg-white p-4 md:p-6 rounded-lg shadow-md hidden space-y-4 text-sm md:text-base">
             <h2 class="text-lg font-semibold text-gray-700">Manage Products Menu</h2>
             <div class="flex gap-2">
@@ -122,7 +130,7 @@
         </div>
 
         <!-- Detailed Customer View Modal -->
-        <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center p-3 z-50">
+        <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center p-3 z-40">
             <div class="bg-white rounded-lg p-4 md:p-6 max-w-lg w-full max-h-screen overflow-y-auto space-y-3" id="modalContent"></div>
         </div>
     </div>
@@ -147,6 +155,31 @@
 
         let defaultProducts = ["Door (വാതിൽ)", "Window (ജനൽ)", "Almarah (അലമാര)", "Gate (ഗേറ്റ്)", "Grill (ഗ്രിൽ)"];
 
+        function showAppAlert(message, callback) {
+            let modal = document.getElementById('appModal');
+            let textElem = document.getElementById('appModalText');
+            let btnDiv = document.getElementById('appModalButtons');
+            textElem.innerText = message;
+            btnDiv.innerHTML = `<button onclick="document.getElementById('appModal').classList.add('hidden'); ${callback ? callback + '()' : ''}" class="bg-blue-600 text-white px-4 py-2 rounded font-bold text-sm">OK</button>`;
+            modal.classList.remove('hidden');
+        }
+
+        window.showAppConfirm = function(message, onYes) {
+            let modal = document.getElementById('appModal');
+            let textElem = document.getElementById('appModalText');
+            let btnDiv = document.getElementById('appModalButtons');
+            textElem.innerText = message;
+            btnDiv.innerHTML = `
+                <button id="confirmYes" class="bg-red-600 text-white px-4 py-2 rounded font-bold text-sm">Yes</button>
+                <button onclick="document.getElementById('appModal').classList.add('hidden')" class="bg-gray-400 text-white px-4 py-2 rounded font-bold text-sm">Cancel</button>
+            `;
+            modal.classList.remove('hidden');
+            document.getElementById('confirmYes').onclick = function() {
+                modal.classList.add('hidden');
+                onYes();
+            };
+        }
+
         window.checkPassword = function() {
             let pass = document.getElementById('passInput').value;
             if(pass === "1234") {
@@ -154,7 +187,7 @@
                 document.getElementById('mainApp').classList.remove('hidden');
                 loadProductsIntoSelects();
             } else {
-                alert("തെറ്റായ പാസ്‌വേഡ്!");
+                showAppAlert("തെറ്റായ പാസ്‌വേഡ്!");
             }
         }
 
@@ -204,12 +237,12 @@
                     document.getElementById('newProductName').value = "";
                     loadProductsIntoSelects();
                     loadProductManagementList();
-                    alert("Product added successfully!");
+                    showAppAlert("Product added successfully!");
                 } else {
-                    alert("Product already exists.");
+                    showAppAlert("Product already exists.");
                 }
             } else {
-                alert("Please enter a valid product name.");
+                showAppAlert("Please enter a valid product name.");
             }
         }
 
@@ -220,17 +253,17 @@
                 defaultProducts[index] = newName.trim();
                 loadProductsIntoSelects();
                 loadProductManagementList();
-                alert("Product updated successfully!");
+                showAppAlert("Product updated successfully!");
             }
         }
 
         window.deleteProduct = function(index) {
-            if(confirm("ഈ പ്രൊഡക്റ്റ് ഒഴിവാക്കണമെന്നുറപ്പാണോ?")) {
+            showAppConfirm("ഈ പ്രൊഡക്റ്റ് ഒഴിവാക്കണമെന്നുറപ്പാണോ?", function() {
                 defaultProducts.splice(index, 1);
                 loadProductsIntoSelects();
                 loadProductManagementList();
-                alert("Product deleted successfully!");
-            }
+                showAppAlert("Product deleted successfully!");
+            });
         }
 
         window.switchTab = function(tab) {
@@ -296,7 +329,7 @@
             let balanceVal = parseFloat(document.getElementById('balanceAmt').innerText.replace('₹', '')) || 0;
 
             if(!name || !phone) {
-                alert("Please enter customer name and phone number!");
+                showAppAlert("Please enter customer name and phone number!");
                 return;
             }
 
@@ -313,7 +346,7 @@
             });
 
             if(itemsList.length === 0) {
-                alert("Please add at least one item!");
+                showAppAlert("Please add at least one item!");
                 return;
             }
 
@@ -335,7 +368,7 @@
                 });
             } catch (e) {
                 console.error("Firebase Error: ", e);
-                alert("Error saving data.");
+                showAppAlert("Error saving data.");
                 return;
             }
 
@@ -475,7 +508,7 @@
             let payInput = document.getElementById('addPayInput').value;
             let payAmt = parseFloat(payInput);
             if(!payAmt || payAmt <= 0) {
-                alert("Please enter a valid amount!");
+                showAppAlert("Please enter a valid amount!");
                 return;
             }
 
@@ -493,6 +526,7 @@
                 console.error("Error updating payment: ", e);
             }
 
+            // WhatsApp message showing only the latest payment and remaining balance
             let msg = `*Thaj Fabrications, Kalikavu*\n`;
             msg += `*Mob: 9020322647*\n\n`;
             msg += `Payment Received: ₹ ${payAmt}\n`;
@@ -502,7 +536,7 @@
             let encodedMsg = encodeURIComponent(msg);
             window.open(`https://wa.me/91${phone}?text=${encodedMsg}`, '_blank');
             document.getElementById('detailModal').classList.add('hidden');
-            alert("Payment recorded successfully!");
+            showAppAlert("Payment recorded successfully!");
         }
 
         window.editRecord = function(data) {
@@ -534,21 +568,21 @@
                 loadProductsIntoSelects();
                 calculateTotal();
             }
-            alert("Record loaded into form for editing.");
+            showAppAlert("Record loaded into form for editing.");
         }
 
         window.cancelRecord = async function(docId) {
-            if(confirm("Are you sure you want to cancel/delete this bill?")) {
+            showAppConfirm("ഈ ബിൽ കാൻസൽ ചെയ്യുകയോ ഡിലീറ്റ് ചെയ്യുകയോ ചെയ്യണമെന്ന് ഉറപ്പാണോ?", async function() {
                 try {
                     await deleteDoc(doc(db, "estimates", docId));
                     document.getElementById('detailModal').classList.add('hidden');
-                    alert("Bill cancelled successfully.");
+                    showAppAlert("Bill cancelled successfully.");
                     searchAccounts();
                 } catch(e) {
                     console.error("Error deleting document: ", e);
-                    alert("Error cancelling bill.");
+                    showAppAlert("Error cancelling bill.");
                 }
-            }
+            });
         }
 
         window.downloadPDF = function() {
