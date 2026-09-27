@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saj Fabrications - Kalikavu | Estimate Generator</title>
+    <!-- Tailwind CSS for modern and responsive UI -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <div class="container mx-auto p-4 max-w-2xl">
+        <!-- Header -->
+        <div class="bg-blue-800 text-white p-6 rounded-lg shadow-md text-center mb-6">
+            <h1 class="text-2xl font-bold">സാജ് ഫാബ്രിക്കേഷൻസ്</h1>
+            <p class="text-lg">കാളികാവ്</p>
+        </div>
+
+        <!-- Customer Details Form -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">കസ്റ്റമർ വിവരങ്ങൾ</h2>
+            <div class="grid grid-cols-1 gap-4">
+                <div>
+                    <label class="block text-gray-600">പേര്:</label>
+                    <input type="text" id="custName" class="w-full p-2 border rounded" placeholder="കസ്റ്റമറുടെ പേര്">
+                </div>
+                <div>
+                    <label class="block text-gray-600">വീടിന്റെ പേര്:</label>
+                    <input type="text" id="houseName" class="w-full p-2 border rounded" placeholder="വീടിന്റെ പേര്">
+                </div>
+                <div>
+                    <label class="block text-gray-600">ഫോൺ / വാട്സാപ്പ് നമ്പർ:</label>
+                    <input type="tel" id="custPhone" class="w-full p-2 border rounded" placeholder="10 അക്ക നമ്പർ">
+                </div>
+                <div>
+                    <label class="block text-gray-600">സ്ഥലം:</label>
+                    <input type="text" id="custLocation" class="w-full p-2 border rounded" placeholder="സ്ഥലം">
+                </div>
+                <div>
+                    <label class="block text-gray-600">Care Of (ആരുടെയെങ്കിലും കീഴിലാണെങ്കിൽ):</label>
+                    <input type="text" id="custCof" class="w-full p-2 border rounded" placeholder="C/O വല്ലവരുമുണ്ടെങ്കിൽ">
+                </div>
+            </div>
+        </div>
+
+        <!-- Items Selection -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">സാധനങ്ങളുടെ വിവരങ്ങൾ</h2>
+            
+            <div class="space-y-4">
+                <!-- Item 1: Doors -->
+                <div class="flex items-center justify-between border-b pb-2">
+                    <span class="w-1/3 font-medium">വാതിലുകൾ (Doors)</span>
+                    <input type="number" id="qtyDoor" placeholder="എണ്ണം" class="w-1/4 p-1 border rounded text-center" oninput="calculateTotal()">
+                    <input type="number" id="priceDoor" placeholder="വില (₹)" class="w-1/4 p-1 border rounded text-center" oninput="calculateTotal()">
+                </div>
+                <!-- Item 2: Windows -->
+                <div class="flex items-center justify-between border-b pb-2">
+                    <span class="w-1/3 font-medium">ജനലുകൾ (Windows)</span>
+                    <input type="number" id="qtyWindow" placeholder="എണ്ണം" class="w-1/4 p-1 border rounded text-center" oninput="calculateTotal()">
+                    <input type="number" id="priceWindow" placeholder="വില (₹)" class="w-1/4 p-1 border rounded text-center" oninput="calculateTotal()">
+                </div>
+                <!-- Item 3: Almarah -->
+                <div class="flex items-center justify-between border-b pb-2">
+                    <span class="w-1/3 font-medium">അലമാര (Almarah)</span>
+                    <input type="number" id="qtyAlmarah" placeholder="എണ്ണം" class="w-1/4 p-1 border rounded text-center" oninput="calculateTotal()">
+                    <input type="number" id="priceAlmarah" placeholder="വില (₹)" class="w-1/4 p-1 border rounded text-center" oninput="calculateTotal()">
+                </div>
+            </div>
+
+            <!-- Total Calculation -->
+            <div class="mt-6 p-4 bg-gray-50 rounded border">
+                <div class="flex justify-between text-lg font-bold">
+                    <span>ആകെ തുക (Total):</span>
+                    <span id="grandTotal">₹ 0</span>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-gray-600">അഡ്വാൻസ് നൽകിയ തുക:</label>
+                    <input type="number" id="advanceAmt" placeholder="₹" class="w-full p-2 border rounded" oninput="calculateTotal()">
+                </div>
+                <div class="flex justify-between text-md font-semibold mt-2 text-red-600">
+                    <span>ബാലൻസ് തുക:</span>
+                    <span id="balanceAmt">₹ 0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4">
+            <button onclick="sendWhatsApp()" class="w-1/2 bg-green-600 text-white p-3 rounded-lg font-bold hover:bg-green-700 text-center">
+                WhatsApp അയക്കുക
+            </button>
+            <button onclick="sendSMS()" class="w-1/2 bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700 text-center">
+                SMS അയക്കുക
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript for Calculations and Sharing -->
+    <script>
+        function calculateTotal() {
+            let qDoor = document.getElementById('qtyDoor').value || 0;
+            let pDoor = document.getElementById('priceDoor').value || 0;
+            
+            let qWindow = document.getElementById('qtyWindow').value || 0;
+            let pWindow = document.getElementById('priceWindow').value || 0;
+
+            let qAlmarah = document.getElementById('qtyAlmarah').value || 0;
+            let pAlmarah = document.getElementById('priceAlmarah').value || 0;
+
+            let total = (qDoor * pDoor) + (qWindow * pWindow) + (qAlmarah * pAlmarah);
+            document.getElementById('grandTotal').innerText = '₹ ' + total;
+
+            let advance = document.getElementById('advanceAmt').value || 0;
+            let balance = total - advance;
+            document.getElementById('balanceAmt').innerText = '₹ ' + balance;
+        }
+
+        function generateMessage() {
+            let name = document.getElementById('custName').value;
+            let house = document.getElementById('houseName').value;
+            let total = document.getElementById('grandTotal').innerText;
+            let advance = document.getElementById('advanceAmt').value || 0;
+            let balance = document.getElementById('balanceAmt').innerText;
+
+            let msg = `*സാജ് ഫാബ്രിക്കേഷൻസ്, കാളികാവ്*\n\n`;
+            msg += `കസ്റ്റമർ: ${name} (${house})\n`;
+            msg += `ആകെ തുക: ${total}\n`;
+            msg += `അഡ്വാൻസ്: ₹ ${advance}\n`;
+            msg += `ബാലൻസ്: ${balance}\n\nനന്ദി!`;
+            return encodeURIComponent(msg);
+        }
+
+        function sendWhatsApp() {
+            let phone = document.getElementById('custPhone').value;
+            let msg = generateMessage();
+            window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
+        }
+
+        function sendSMS() {
+            let phone = document.getElementById('custPhone').value;
+            let name = document.getElementById('custName').value;
+            let total = document.getElementById('grandTotal').innerText;
+            let smsBody = encodeURIComponent(`Saj Fabrications: Hello ${name}, Your total estimate is ${total}. Thank you!`);
+            window.open(`sms:${phone}?body=${smsBody}`);
+        }
+    </script>
+</body>
+</html>
