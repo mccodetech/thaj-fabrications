@@ -44,8 +44,9 @@
 
         <!-- Section 1: New Estimate -->
         <div id="sectionNew" class="space-y-4">
-            <div class="bg-white p-4 md:p-6 rounded-lg shadow-md">
-                <h2 class="text-lg font-semibold mb-3 text-gray-700">Customer Vivarangal</h2>
+            <!-- Step 1: Customer Details Form -->
+            <div id="stepCustomer" class="bg-white p-4 md:p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-3 text-gray-700">Customer Details</h2>
                 <div class="grid grid-cols-1 gap-3 text-sm md:text-base">
                     <div>
                         <label class="block text-gray-600">Name:</label>
@@ -68,9 +69,19 @@
                         <input type="text" id="custCof" class="w-full p-2 border rounded" placeholder="C/O if any">
                     </div>
                 </div>
+                <button onclick="proceedToProducts()" class="mt-4 w-full bg-blue-600 text-white p-2 rounded font-bold text-sm">Next: Add Products</button>
             </div>
 
-            <div class="bg-white p-4 md:p-6 rounded-lg shadow-md">
+            <!-- Step 2: Products Section (Initially Hidden) -->
+            <div id="stepProducts" class="bg-white p-4 md:p-6 rounded-lg shadow-md hidden space-y-4">
+                <div class="bg-blue-50 p-3 rounded border flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-gray-500">Customer:</p>
+                        <p id="savedCustDisplay" class="font-bold text-blue-900"></p>
+                    </div>
+                    <button onclick="editCustomerDetails()" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Edit Details</button>
+                </div>
+
                 <div class="flex justify-between items-center mb-3">
                     <h2 class="text-lg font-semibold text-gray-700">Products Selection</h2>
                     <button onclick="addItemRow()" class="bg-indigo-600 text-white px-3 py-1 rounded text-xs md:text-sm font-bold">+ Add Item</button>
@@ -99,10 +110,8 @@
                         <span id="balanceAmt">₹ 0</span>
                     </div>
                 </div>
-            </div>
 
-            <div class="flex flex-col gap-3">
-                <button onclick="saveAndSendWhatsApp()" class="bg-green-600 text-white p-3 rounded-lg font-bold hover:bg-green-700 text-center text-sm md:text-base">
+                <button onclick="saveAndSendWhatsApp()" class="w-full bg-green-600 text-white p-3 rounded-lg font-bold hover:bg-green-700 text-center text-sm md:text-base">
                     Save & Send WhatsApp Bill
                 </button>
             </div>
@@ -195,6 +204,24 @@
             document.getElementById('mainApp').classList.add('hidden');
             document.getElementById('loginScreen').classList.remove('hidden');
             document.getElementById('passInput').value = "";
+        }
+
+        window.proceedToProducts = function() {
+            let name = document.getElementById('custName').value.trim();
+            let phone = document.getElementById('custPhone').value.trim();
+            if(!name || !phone) {
+                showAppAlert("Please enter customer name and phone number!");
+                return;
+            }
+            let house = document.getElementById('houseName').value.trim();
+            document.getElementById('savedCustDisplay').innerText = `${name} ${house ? '('+house+')' : ''} - ${phone}`;
+            document.getElementById('stepCustomer').classList.add('hidden');
+            document.getElementById('stepProducts').classList.remove('hidden');
+        }
+
+        window.editCustomerDetails = function() {
+            document.getElementById('stepProducts').classList.add('hidden');
+            document.getElementById('stepCustomer').classList.remove('hidden');
         }
 
         function loadProductsIntoSelects() {
@@ -327,11 +354,6 @@
             let total = document.getElementById('grandTotal').innerText;
             let advance = parseFloat(document.getElementById('advanceAmt').value) || 0;
             let balanceVal = parseFloat(document.getElementById('balanceAmt').innerText.replace('₹', '')) || 0;
-
-            if(!name || !phone) {
-                showAppAlert("Please enter customer name and phone number!");
-                return;
-            }
 
             let itemsList = [];
             let rows = document.querySelectorAll('.item-row');
@@ -526,7 +548,6 @@
                 console.error("Error updating payment: ", e);
             }
 
-            // WhatsApp message showing only the latest payment and remaining balance
             let msg = `*Thaj Fabrications, Kalikavu*\n`;
             msg += `*Mob: 9020322647*\n\n`;
             msg += `Payment Received: ₹ ${payAmt}\n`;
@@ -549,6 +570,10 @@
             document.getElementById('custCof').value = data.careOf || '';
             document.getElementById('advanceAmt').value = data.advanceAmount || '';
             
+            document.getElementById('savedCustDisplay').innerText = `${data.customerName} ${data.houseName ? '('+data.houseName+')' : ''} - ${data.phone}`;
+            document.getElementById('stepCustomer').classList.add('hidden');
+            document.getElementById('stepProducts').classList.remove('hidden');
+
             let container = document.getElementById('itemsContainer');
             container.innerHTML = "";
             if(data.items) {
