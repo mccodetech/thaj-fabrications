@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saj Fabrications - Kalikavu | Estimate Generator</title>
-    <!-- Tailwind CSS for modern and responsive UI -->
+    <!-- Tailwind CSS for modern UI -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 font-sans">
@@ -86,19 +86,35 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex gap-4">
-            <button onclick="sendWhatsApp()" class="w-1/2 bg-green-600 text-white p-3 rounded-lg font-bold hover:bg-green-700 text-center">
-                WhatsApp അയക്കുക
+        <div class="flex flex-col gap-3">
+            <button onclick="saveAndSendWhatsApp()" class="bg-green-600 text-white p-3 rounded-lg font-bold hover:bg-green-700 text-center">
+                ഡാറ്റ സേവ് ചെയ്ത് WhatsApp അയക്കുക
             </button>
-            <button onclick="sendSMS()" class="w-1/2 bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700 text-center">
+            <button onclick="sendSMS()" class="bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700 text-center">
                 SMS അയക്കുക
             </button>
         </div>
     </div>
 
-    <!-- JavaScript for Calculations and Sharing -->
-    <script>
-        function calculateTotal() {
+    <!-- Firebase SDKs and Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqTWN4ZtGgn0NW5MJiRxHFSL05gIPIgy4",
+            authDomain: "thajfabrications.firebaseapp.com",
+            projectId: "thajfabrications",
+            storageBucket: "thajfabrications.firebasestorage.app",
+            messagingSenderId: "660437727559",
+            appId: "1:660437727559:web:e524fc879356e771fbf462",
+            measurementId: "G-SS0Y0WTRZK"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.calculateTotal = function() {
             let qDoor = document.getElementById('qtyDoor').value || 0;
             let pDoor = document.getElementById('priceDoor').value || 0;
             
@@ -116,28 +132,57 @@
             document.getElementById('balanceAmt').innerText = '₹ ' + balance;
         }
 
-        function generateMessage() {
+        window.saveAndSendWhatsApp = async function() {
             let name = document.getElementById('custName').value;
             let house = document.getElementById('houseName').value;
+            let phone = document.getElementById('custPhone').value;
+            let location = document.getElementById('custLocation').value;
+            let cof = document.getElementById('custCof').value;
+            
             let total = document.getElementById('grandTotal').innerText;
             let advance = document.getElementById('advanceAmt').value || 0;
             let balance = document.getElementById('balanceAmt').innerText;
 
-            let msg = `*സാജ് ഫാബ്രിക്കേഷൻസ്, കാളികാവ്*\n\n`;
-            msg += `കസ്റ്റമർ: ${name} (${house})\n`;
-            msg += `ആകെ തുക: ${total}\n`;
-            msg += `അഡ്വാൻസ്: ₹ ${advance}\n`;
-            msg += `ബാലൻസ്: ${balance}\n\nനന്ദി!`;
-            return encodeURIComponent(msg);
+            if(!name || !phone) {
+                alert("ദയവായി കസ്റ്റമറുടെ പേരും ഫോൺ നമ്പറും നൽകുക!");
+                return;
+            }
+
+            try {
+                // Save to Firestore Database
+                await addDoc(collection(db, "estimates"), {
+                    customerName: name,
+                    houseName: house,
+                    phone: phone,
+                    location: location,
+                    careOf: cof,
+                    doors: { qty: document.getElementById('qtyDoor').value || 0, price: document.getElementById('priceDoor').value || 0 },
+                    windows: { qty: document.getElementById('qtyWindow').value || 0, price: document.getElementById('priceWindow').value || 0 },
+                    almarah: { qty: document.getElementById('qtyAlmarah').value || 0, price: document.getElementById('priceAlmarah').value || 0 },
+                    totalAmount: total,
+                    advanceAmount: advance,
+                    balanceAmount: balance,
+                    timestamp: new Date()
+                });
+
+                // WhatsApp Message Generation
+                let msg = `*സാജ് ഫാബ്രിക്കേഷൻസ്, കാളികാവ്*\n\n`;
+                msg += `കസ്റ്റമർ: ${name} (${house})\n`;
+                msg += `സ്ഥലം: ${location}\n`;
+                msg += `ആകെ തുക: ${total}\n`;
+                msg += `അഡ്വാൻസ്: ₹ ${advance}\n`;
+                msg += `ബാലൻസ്: ${balance}\n\nനന്ദി!`;
+                
+                let encodedMsg = encodeURIComponent(msg);
+                window.open(`https://wa.me/91${phone}?text=${encodedMsg}`, '_blank');
+
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                alert("ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ ചെറിയൊരു തടസ്സമുണ്ടായി. വീണ്ടും ശ്രമിക്കുക.");
+            }
         }
 
-        function sendWhatsApp() {
-            let phone = document.getElementById('custPhone').value;
-            let msg = generateMessage();
-            window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
-        }
-
-        function sendSMS() {
+        window.sendSMS = function() {
             let phone = document.getElementById('custPhone').value;
             let name = document.getElementById('custName').value;
             let total = document.getElementById('grandTotal').innerText;
