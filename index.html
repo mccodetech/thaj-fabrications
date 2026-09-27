@@ -11,68 +11,61 @@
     <div class="container mx-auto p-4 max-w-2xl">
         <!-- Header -->
         <div class="bg-blue-800 text-white p-6 rounded-lg shadow-md text-center mb-6">
-            <h1 class="text-2xl font-bold">താജ് ഫാബ്രിക്കേഷൻസ്, കാളികാവ്</h1>
+            <h1 class="text-2xl font-bold">Thaj Fabrications, Kalikavu</h1>
             <p class="text-sm mt-1">Mob: 9020322647</p>
         </div>
 
         <!-- Navigation Tabs -->
         <div class="flex mb-6 bg-white rounded-lg shadow overflow-hidden">
-            <button onclick="switchTab('newEstimate')" id="tabNew" class="w-1/2 p-3 font-bold bg-blue-600 text-white text-center">പുതിയ എസ്റ്റിമേറ്റ്</button>
-            <button onclick="switchTab('accounts')" id="tabAcc" class="w-1/2 p-3 font-bold bg-gray-200 text-gray-700 text-center">അക്കൗണ്ട്സ് (Accounts)</button>
+            <button onclick="switchTab('newEstimate')" id="tabNew" class="w-1/3 p-3 font-bold bg-blue-600 text-white text-center">Estimate</button>
+            <button onclick="switchTab('manageProducts')" id="tabProd" class="w-1/3 p-3 font-bold bg-gray-200 text-gray-700 text-center">Products</button>
+            <button onclick="switchTab('accounts')" id="tabAcc" class="w-1/3 p-3 font-bold bg-gray-200 text-gray-700 text-center">Accounts</button>
         </div>
 
         <!-- Section 1: New Estimate -->
         <div id="sectionNew" class="space-y-6">
             <!-- Customer Details Form -->
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4 text-gray-700">കസ്റ്റമർ വിവരങ്ങൾ</h2>
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">Customer Vivarangal</h2>
                 <div class="grid grid-cols-1 gap-4">
                     <div>
-                        <label class="block text-gray-600">പേര്:</label>
-                        <input type="text" id="custName" class="w-full p-2 border rounded" placeholder="കസ്റ്റമറുടെ പേര്">
+                        <label class="block text-gray-600">Name:</label>
+                        <input type="text" id="custName" class="w-full p-2 border rounded" placeholder="Customer's name">
                     </div>
                     <div>
-                        <label class="block text-gray-600">വീടിന്റെ പേര്:</label>
-                        <input type="text" id="houseName" class="w-full p-2 border rounded" placeholder="വീടിന്റെ പേര്">
+                        <label class="block text-gray-600">House Name:</label>
+                        <input type="text" id="houseName" class="w-full p-2 border rounded" placeholder="House name">
                     </div>
                     <div>
-                        <label class="block text-gray-600">ഫോൺ / വാട്സാപ്പ് നമ്പർ:</label>
-                        <input type="tel" id="custPhone" class="w-full p-2 border rounded" placeholder="10 അക്ക നമ്പർ">
+                        <label class="block text-gray-600">Phone / WhatsApp No:</label>
+                        <input type="tel" id="custPhone" class="w-full p-2 border rounded" placeholder="10 digit number">
                     </div>
                     <div>
-                        <label class="block text-gray-600">സ്ഥലം:</label>
-                        <input type="text" id="custLocation" class="w-full p-2 border rounded" placeholder="സ്ഥലം">
+                        <label class="block text-gray-600">Location:</label>
+                        <input type="text" id="custLocation" class="w-full p-2 border rounded" placeholder="Location">
                     </div>
                     <div>
-                        <label class="block text-gray-600">Care Of (ആരുടെയെങ്കിലും കീഴിലാണെങ്കിൽ):</label>
-                        <input type="text" id="custCof" class="w-full p-2 border rounded" placeholder="C/O വല്ലവരുമുണ്ടെങ്കിൽ">
+                        <label class="block text-gray-600">Care Of (C/O):</label>
+                        <input type="text" id="custCof" class="w-full p-2 border rounded" placeholder="C/O if any">
                     </div>
                 </div>
             </div>
 
-            <!-- Products / Items Selection -->
+            <!-- Items Selection -->
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-gray-700">സാധനങ്ങളുടെ വിവരങ്ങൾ (Products)</h2>
-                    <button onclick="addItemRow()" class="bg-indigo-600 text-white px-3 py-1 rounded text-sm font-bold">+ പുതിയ പ്രൊഡക്റ്റ് ചേർക്കുക</button>
+                    <h2 class="text-xl font-semibold text-gray-700">Products Selection</h2>
+                    <button onclick="addItemRow()" class="bg-indigo-600 text-white px-3 py-1 rounded text-sm font-bold">+ Add Item</button>
                 </div>
                 
                 <div id="itemsContainer" class="space-y-3">
-                    <!-- Default Item Row -->
+                    <!-- Default Row -->
                     <div class="item-row grid grid-cols-12 gap-2 items-center border-b pb-3">
-                        <div class="col-span-5 space-y-1">
-                            <select class="item-name w-full p-2 border rounded bg-white" onchange="checkCustomItem(this)">
-                                <option value="വാതിൽ (Door)">വാതിൽ (Door)</option>
-                                <option value="ജനൽ (Window)">ജനൽ (Window)</option>
-                                <option value="അലമാര (Almarah)">അലമാര (Almarah)</option>
-                                <option value="ഗേറ്റ് (Gate)">ഗേറ്റ് (Gate)</option>
-                                <option value="ഗ്രിൽ (Grill)">ഗ്രിൽ (Grill)</option>
-                                <option value="custom"> മറ്റു സാധനം (പുതിയത് ചേർക്കുക)</option>
-                            </select>
-                            <input type="text" placeholder="പ്രൊഡക്റ്റ് പേര് എഴുതുക" class="custom-item-name w-full p-2 border rounded text-sm hidden" style="margin-top: 4px;">
-                        </div>
-                        <input type="number" placeholder="എണ്ണം" class="item-qty col-span-2 p-2 border rounded text-center" oninput="calculateTotal()">
-                        <input type="number" placeholder="വില (₹)" class="item-price col-span-4 p-2 border rounded text-center" oninput="calculateTotal()">
+                        <select class="item-name col-span-5 p-2 border rounded bg-white">
+                            <!-- Populated dynamically from default/saved products -->
+                        </select>
+                        <input type="number" placeholder="Qty" class="item-qty col-span-2 p-2 border rounded text-center" oninput="calculateTotal()">
+                        <input type="number" placeholder="Price (₹)" class="item-price col-span-4 p-2 border rounded text-center" oninput="calculateTotal()">
                         <button onclick="this.parentElement.remove(); calculateTotal();" class="col-span-1 text-red-600 font-bold text-center">X</button>
                     </div>
                 </div>
@@ -80,15 +73,15 @@
                 <!-- Total Calculation -->
                 <div class="mt-6 p-4 bg-gray-50 rounded border">
                     <div class="flex justify-between text-lg font-bold">
-                        <span>ആകെ തുക (Total):</span>
+                        <span>Grand Total:</span>
                         <span id="grandTotal">₹ 0</span>
                     </div>
                     <div class="mt-4">
-                        <label class="block text-gray-600">അഡ്വാൻസ് നൽകിയ തുക:</label>
+                        <label class="block text-gray-600">Advance Amount:</label>
                         <input type="number" id="advanceAmt" placeholder="₹" class="w-full p-2 border rounded" oninput="calculateTotal()">
                     </div>
                     <div class="flex justify-between text-md font-semibold mt-2 text-red-600">
-                        <span>ബാലൻസ് തുക:</span>
+                        <span>Balance Amount:</span>
                         <span id="balanceAmt">₹ 0</span>
                     </div>
                 </div>
@@ -97,20 +90,33 @@
             <!-- Action Buttons -->
             <div class="flex flex-col gap-3">
                 <button onclick="saveAndSendWhatsApp()" class="bg-green-600 text-white p-3 rounded-lg font-bold hover:bg-green-700 text-center">
-                    ഡാറ്റ സേവ് ചെയ്ത് WhatsApp അയക്കുക
+                    Save & Send WhatsApp
                 </button>
             </div>
         </div>
 
-        <!-- Section 2: Accounts / Search History -->
+        <!-- Section 2: Manage Products Menu -->
+        <div id="sectionProducts" class="bg-white p-6 rounded-lg shadow-md hidden space-y-4">
+            <h2 class="text-xl font-semibold text-gray-700">Add New Product to Default Menu</h2>
+            <div class="flex gap-2">
+                <input type="text" id="newProductName" placeholder="Enter product name (e.g., Gate, Grill, etc.)" class="w-full p-2 border rounded">
+                <button onclick="addNewProduct()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">Add</button>
+            </div>
+            <h3 class="text-lg font-medium text-gray-600 mt-4">Current Products List:</h3>
+            <ul id="productsListUI" class="list-disc pl-5 space-y-1 text-gray-700">
+                <!-- Product list will load here -->
+            </ul>
+        </div>
+
+        <!-- Section 3: Accounts / Search History -->
         <div id="sectionAcc" class="bg-white p-6 rounded-lg shadow-md hidden">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">കസ്റ്റമർ അക്കൗണ്ട്സ് തിരയുക</h2>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Search Customer Accounts</h2>
             <div class="flex gap-2 mb-4">
-                <input type="text" id="searchQuery" placeholder="പേരോ ഫോൺ നമ്പറോ നൽകുക" class="w-full p-2 border rounded">
-                <button onclick="searchAccounts()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">സെർച്ച്</button>
+                <input type="text" id="searchQuery" placeholder="Enter name or phone number" class="w-full p-2 border rounded">
+                <button onclick="searchAccounts()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">Search</button>
             </div>
             <div id="searchResults" class="space-y-4">
-                <!-- Search results will appear here -->
+                <!-- Results here -->
             </div>
         </div>
     </div>
@@ -133,17 +139,71 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Default Product List
+        let defaultProducts = ["Door (വാതിൽ)", "Window (ജനൽ)", "Almarah (അലമാര)", "Gate (ഗേറ്റ്)", "Grill (ഗ്രിൽ)"];
+
+        // Load Products into Select Dropdowns
+        function loadProductsIntoSelects() {
+            let selects = document.querySelectorAll('.item-name');
+            selects.forEach(select => {
+                let currentVal = select.value;
+                select.innerHTML = "";
+                defaultProducts.forEach(prod => {
+                    let opt = document.createElement('option');
+                    opt.value = prod;
+                    opt.textContent = prod;
+                    select.appendChild(opt);
+                });
+                if(currentVal) select.value = currentVal;
+            });
+        }
+
+        window.loadProductManagementList = function() {
+            let ul = document.getElementById('productsListUI');
+            ul.innerHTML = "";
+            defaultProducts.forEach(prod => {
+                let li = document.createElement('li');
+                li.textContent = prod;
+                ul.appendChild(li);
+            });
+        }
+
+        window.addNewProduct = function() {
+            let prodName = document.getElementById('newProductName').value.trim();
+            if(prodName) {
+                if(!defaultProducts.includes(prodName)) {
+                    defaultProducts.push(prodName);
+                    document.getElementById('newProductName').value = "";
+                    loadProductsIntoSelects();
+                    loadProductManagementList();
+                    alert("Product added successfully!");
+                } else {
+                    alert("Product already exists in the list.");
+                }
+            } else {
+                alert("Please enter a valid product name.");
+            }
+        }
+
         window.switchTab = function(tab) {
+            document.getElementById('sectionNew').classList.add('hidden');
+            document.getElementById('sectionProducts').classList.add('hidden');
+            document.getElementById('sectionAcc').classList.add('hidden');
+
+            document.getElementById('tabNew').className = "w-1/3 p-3 font-bold bg-gray-200 text-gray-700 text-center";
+            document.getElementById('tabProd').className = "w-1/3 p-3 font-bold bg-gray-200 text-gray-700 text-center";
+            document.getElementById('tabAcc').className = "w-1/3 p-3 font-bold bg-gray-200 text-gray-700 text-center";
+
             if(tab === 'newEstimate') {
                 document.getElementById('sectionNew').classList.remove('hidden');
-                document.getElementById('sectionAcc').classList.add('hidden');
-                document.getElementById('tabNew').className = "w-1/2 p-3 font-bold bg-blue-600 text-white text-center";
-                document.getElementById('tabAcc').className = "w-1/2 p-3 font-bold bg-gray-200 text-gray-700 text-center";
+                document.getElementById('tabNew').className = "w-1/3 p-3 font-bold bg-blue-600 text-white text-center";
+            } else if(tab === 'manageProducts') {
+                document.getElementById('sectionProducts').classList.remove('hidden');
+                document.getElementById('tabProd').className = "w-1/3 p-3 font-bold bg-blue-600 text-white text-center";
+                loadProductManagementList();
             } else {
-                document.getElementById('sectionNew').classList.add('hidden');
                 document.getElementById('sectionAcc').classList.remove('hidden');
-                document.getElementById('tabAcc').className = "w-1/2 p-3 font-bold bg-blue-600 text-white text-center";
-                document.getElementById('tabNew').className = "w-1/2 p-3 font-bold bg-gray-200 text-gray-700 text-center";
+                document.getElementById('tabAcc').className = "w-1/3 p-3 font-bold bg-blue-600 text-white text-center";
             }
         }
 
@@ -152,33 +212,14 @@
             let row = document.createElement('div');
             row.className = "item-row grid grid-cols-12 gap-2 items-center border-b pb-3";
             row.innerHTML = `
-                <div class="col-span-5 space-y-1">
-                    <select class="item-name w-full p-2 border rounded bg-white" onchange="checkCustomItem(this)">
-                        <option value="വാതിൽ (Door)">വാതിൽ (Door)</option>
-                        <option value="ജനൽ (Window)">ജനൽ (Window)</option>
-                        <option value="അലമാര (Almarah)">അലമാര (Almarah)</option>
-                        <option value="ഗേറ്റ് (Gate)">ഗേറ്റ് (Gate)</option>
-                        <option value="ഗ്രിൽ (Grill)">ഗ്രിൽ (Grill)</option>
-                        <option value="custom"> മറ്റു സാധനം (പുതിയത് ചേർക്കുക)</option>
-                    </select>
-                    <input type="text" placeholder="പ്രൊഡക്റ്റ് പേര് എഴുതുക" class="custom-item-name w-full p-2 border rounded text-sm hidden" style="margin-top: 4px;">
-                </div>
-                <input type="number" placeholder="എണ്ണം" class="item-qty col-span-2 p-2 border rounded text-center" oninput="calculateTotal()">
-                <input type="number" placeholder="വില (₹)" class="item-price col-span-4 p-2 border rounded text-center" oninput="calculateTotal()">
+                <select class="item-name col-span-5 p-2 border rounded bg-white">
+                </select>
+                <input type="number" placeholder="Qty" class="item-qty col-span-2 p-2 border rounded text-center" oninput="calculateTotal()">
+                <input type="number" placeholder="Price (₹)" class="item-price col-span-4 p-2 border rounded text-center" oninput="calculateTotal()">
                 <button onclick="this.parentElement.remove(); calculateTotal();" class="col-span-1 text-red-600 font-bold text-center">X</button>
             `;
             container.appendChild(row);
-        }
-
-        window.checkCustomItem = function(selectElem) {
-            let customInput = selectElem.parentElement.querySelector('.custom-item-name');
-            if(selectElem.value === 'custom') {
-                customInput.classList.remove('hidden');
-                customInput.focus();
-            } else {
-                customInput.classList.add('hidden');
-                customInput.value = '';
-            }
+            loadProductsIntoSelects();
         }
 
         window.calculateTotal = function() {
@@ -208,25 +249,24 @@
             let balance = document.getElementById('balanceAmt').innerText;
 
             if(!name || !phone) {
-                alert("ദയവായി കസ്റ്റമറുടെ പേരും ഫോൺ നമ്പറും നൽകുക!");
+                alert("Please enter customer name and phone number!");
                 return;
             }
 
             let itemsList = [];
             let rows = document.querySelectorAll('.item-row');
             rows.forEach(row => {
-                let selectVal = row.querySelector('.item-name').value;
-                let itemName = selectVal === 'custom' ? row.querySelector('.custom-item-name').value : selectVal;
+                let itemName = row.querySelector('.item-name').value;
                 let qty = row.querySelector('.item-qty').value || 0;
                 let price = row.querySelector('.item-price').value || 0;
                 
-                if(qty > 0 && itemName) {
+                if(qty > 0) {
                     itemsList.push({ name: itemName, qty: qty, price: price });
                 }
             });
 
             if(itemsList.length === 0) {
-                alert("ദയവായി ഏതെങ്കിലും പ്രൊഡക്റ്റും എണ്ണവും വിലയും നൽകുക!");
+                alert("Please add at least one item with quantity!");
                 return;
             }
 
@@ -245,23 +285,23 @@
                 });
             } catch (e) {
                 console.error("Firebase Error: ", e);
-                alert("ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ തടസ്സമുണ്ടായി.");
+                alert("Error saving data.");
                 return;
             }
 
-            let msg = `*താജ് ഫാബ്രിക്കേഷൻസ്, കാളികാവ്*\n`;
+            let msg = `*Thaj Fabrications, Kalikavu*\n`;
             msg += `*Mob: 9020322647*\n\n`;
-            msg += `കസ്റ്റമർ: ${name} (${house})\n`;
-            msg += `സ്ഥലം: ${location}\n\n`;
-            msg += `*ഫാബ്രിക്കേഷൻ വിവരങ്ങൾ:*\n`;
+            msg += `Customer: ${name} (${house})\n`;
+            msg += `Location: ${location}\n\n`;
+            msg += `*Fabrication Items:*\n`;
             
             itemsList.forEach(item => {
-                msg += `- ${item.name}: ${item.qty} എണ്ണം (വില: ₹${item.price} വീതം)\n`;
+                msg += `- ${item.name}: ${item.qty} Nos (Price: ₹${item.price} each)\n`;
             });
 
-            msg += `\nആകെ തുക: ${total}\n`;
-            msg += `അഡ്വാൻസ്: ₹ ${advance}\n`;
-            msg += `ബാലൻസ്: ${balance}\n\nനന്ദി!`;
+            msg += `\nTotal Amount: ${total}\n`;
+            msg += `Advance: ₹ ${advance}\n`;
+            msg += `Balance: ${balance}\n\nThank you!`;
             
             let encodedMsg = encodeURIComponent(msg);
             window.open(`https://wa.me/91${phone}?text=${encodedMsg}`, '_blank');
@@ -277,31 +317,23 @@
             document.getElementById('balanceAmt').innerText = '₹ 0';
             document.getElementById('itemsContainer').innerHTML = `
                 <div class="item-row grid grid-cols-12 gap-2 items-center border-b pb-3">
-                    <div class="col-span-5 space-y-1">
-                        <select class="item-name w-full p-2 border rounded bg-white" onchange="checkCustomItem(this)">
-                            <option value="വാതിൽ (Door)">വാതിൽ (Door)</option>
-                            <option value="ജനൽ (Window)">ജനൽ (Window)</option>
-                            <option value="അലമാര (Almarah)">അലമാര (Almarah)</option>
-                            <option value="ഗേറ്റ് (Gate)">ഗേറ്റ് (Gate)</option>
-                            <option value="ഗ്രിൽ (Grill)">ഗ്രിൽ (Grill)</option>
-                            <option value="custom"> മറ്റു സാധനം (പുതിയത് ചേർക്കുക)</option>
-                        </select>
-                        <input type="text" placeholder="പ്രൊഡക്റ്റ് പേര് എഴുതുക" class="custom-item-name w-full p-2 border rounded text-sm hidden" style="margin-top: 4px;">
-                    </div>
-                    <input type="number" placeholder="എണ്ണം" class="item-qty col-span-2 p-2 border rounded text-center" oninput="calculateTotal()">
-                    <input type="number" placeholder="വില (₹)" class="item-price col-span-4 p-2 border rounded text-center" oninput="calculateTotal()">
+                    <select class="item-name col-span-5 p-2 border rounded bg-white">
+                    </select>
+                    <input type="number" placeholder="Qty" class="item-qty col-span-2 p-2 border rounded text-center" oninput="calculateTotal()">
+                    <input type="number" placeholder="Price (₹)" class="item-price col-span-4 p-2 border rounded text-center" oninput="calculateTotal()">
                     <button onclick="this.parentElement.remove(); calculateTotal();" class="col-span-1 text-red-600 font-bold text-center">X</button>
                 </div>
             `;
+            loadProductsIntoSelects();
         }
 
         window.searchAccounts = async function() {
             let queryText = document.getElementById('searchQuery').value.trim();
             let resultsDiv = document.getElementById('searchResults');
-            resultsDiv.innerHTML = "പരതുന്നു...";
+            resultsDiv.innerHTML = "Searching...";
 
             if(!queryText) {
-                resultsDiv.innerHTML = "ദയവായി പേരോ ഫോൺ നമ്പറോ നൽകുക.";
+                resultsDiv.innerHTML = "Please enter name or phone number.";
                 return;
             }
 
@@ -317,28 +349,31 @@
                         let itemsText = "";
                         if(data.items) {
                             data.items.forEach(it => {
-                                itemsText += `<br>&nbsp;&nbsp;- ${it.name}: ${it.qty} എണ്ണം (₹${it.price})`;
+                                itemsText += `<br>&nbsp;&nbsp;- ${it.name}: ${it.qty} Nos (₹${it.price})`;
                             });
                         }
                         let itemHtml = `<div class="p-4 border rounded bg-gray-50 shadow-sm space-y-1">
-                            <p><strong>പേര്:</strong> ${data.customerName} (${data.houseName})</p>
-                            <p><strong>ഫോൺ:</strong> ${data.phone}</p>
-                            <p><strong>സ്ഥലം:</strong> ${data.location}</p>
-                            <p><strong>സാധനങ്ങൾ:</strong> ${itemsText}</p>
-                            <p class="text-blue-700 font-semibold mt-2">ആകെ തുക: ${data.totalAmount} | ബാലൻസ്: ${data.balanceAmount}</p>
+                            <p><strong>Name:</strong> ${data.customerName} (${data.houseName})</p>
+                            <p><strong>Phone:</strong> ${data.phone}</p>
+                            <p><strong>Location:</strong> ${data.location}</p>
+                            <p><strong>Items:</strong> ${itemsText}</p>
+                            <p class="text-blue-700 font-semibold mt-2">Total: ${data.totalAmount} | Balance: ${data.balanceAmount}</p>
                         </div>`;
                         resultsDiv.innerHTML += itemHtml;
                     }
                 });
 
                 if(!found) {
-                    resultsDiv.innerHTML = "വിവരങ്ങൾ ഒന്നും കണ്ടെത്തിയില്ല.";
+                    resultsDiv.innerHTML = "No records found.";
                 }
             } catch (e) {
                 console.error("Search error: ", e);
-                resultsDiv.innerHTML = "സെർച്ച് ചെയ്യുന്നതിൽ തടസ്സമുണ്ടായി.";
+                resultsDiv.innerHTML = "Error during search.";
             }
         }
+
+        // Initial Load
+        loadProductsIntoSelects();
     </script>
 </body>
 </html>
