@@ -132,14 +132,12 @@
         <div id="sectionAcc" class="bg-white p-4 md:p-6 rounded-2xl shadow-md hidden space-y-4 text-sm md:text-base">
             <h2 class="text-lg font-semibold text-gray-700">Accounts & Reports</h2>
             
-            <!-- Capsule Filter Buttons -->
             <div class="flex gap-2 overflow-x-auto pb-2">
                 <button onclick="loadReport('thisMonth')" id="btnMonth" class="px-4 py-2 bg-blue-600 text-white rounded-full text-xs font-bold shadow">This Month</button>
                 <button onclick="loadReport('dateWise')" id="btnDate" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-xs font-bold shadow">Date Wise</button>
                 <button onclick="loadReport('balanceSheet')" id="btnBal" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-xs font-bold shadow">Balance Sheet</button>
             </div>
 
-            <!-- Dynamic Filter Inputs -->
             <div id="filterInputsContainer" class="hidden pt-2">
                 <input type="date" id="selectedDateFilter" class="w-full p-2.5 border rounded-xl text-sm" onchange="filterByDate()">
             </div>
@@ -391,9 +389,13 @@
             }
 
             let now = new Date();
-            let dateStr = now.toLocaleDateString();
+            let dd = String(now.getDate()).padStart(2, '0');
+            let mm = String(now.getMonth() + 1).padStart(2, '0');
+            let yyyy = now.getFullYear();
+            let dateStr = `${dd}/${mm}/${yyyy}`;
             let timeStr = now.toLocaleTimeString();
             let fullDateTime = `${dateStr}, ${timeStr}`;
+            let rawDate = `${yyyy}-${mm}-${dd}`;
 
             try {
                 await addDoc(collection(db, "estimates"), {
@@ -407,7 +409,7 @@
                     advanceAmount: advance,
                     balanceAmount: balanceVal,
                     date: fullDateTime,
-                    rawDate: now.toISOString().split('T')[0],
+                    rawDate: rawDate,
                     additionalPayments: []
                 });
             } catch (e) {
@@ -475,7 +477,8 @@
                 });
 
                 resultsDiv.innerHTML = "";
-                let currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
+                let now = new Date();
+                let currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
                 let filtered = records;
 
                 if(mode === 'thisMonth') {
@@ -655,7 +658,12 @@
                 return;
             }
 
-            let dateStr = new Date().toLocaleDateString();
+            let now = new Date();
+            let dd = String(now.getDate()).padStart(2, '0');
+            let mm = String(now.getMonth() + 1).padStart(2, '0');
+            let yyyy = now.getFullYear();
+            let dateStr = `${dd}/${mm}/${yyyy}`;
+
             existingPayments.push({ amount: payAmt, date: dateStr });
 
             let newBalance = currentBalance - payAmt;
